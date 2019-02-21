@@ -31,8 +31,16 @@ int main (int argc, char *argv[]) {
     products = fopen(argv[1], "r");
     Food *head = NULL;
     head = (struct Food*)malloc(sizeof(struct Food));
-    char temp[100];
-    fgets(temp, 100, products);
+    char temp[1000];
+
+    //getting the titles of the columns out of the way
+    fgets(temp, 105, products);
+    printf("%s", temp);
+
+    //now we enter the first food
+    fscanf(products, "%d", &head->NDB_number);
+    printf("%d \n", head->NDB_number);
+
 
     return 0;
 }
