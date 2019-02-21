@@ -35,11 +35,20 @@ int main (int argc, char *argv[]) {
 
     //getting the titles of the columns out of the way
     fgets(temp, 105, products);
-    printf("%s", temp);
 
-    //now we enter the first food
+    //now we enter the first food's number
     fscanf(products, "%d", &head->NDB_number);
     printf("%d \n", head->NDB_number);
+
+    //now the name
+    fscanf(products, "%s", temp);
+    while (strcmp(temp, "LI") != 0) {
+        strcat(head->name, temp);
+        strcat(head->name, " ");
+        fscanf(products, "%s", temp);
+    }
+
+    printf("%s \n", head->name);
 
 
     return 0;
