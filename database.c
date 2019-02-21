@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 typedef struct food {
     char name[200];
@@ -15,3 +16,8 @@ typedef struct food {
     int calories;
     int sodium;
 };
+
+int main (void) {
+
+    return 0;
+}
