@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 typedef struct Food {
     char name[200];
@@ -19,6 +20,28 @@ typedef struct Food {
     struct Food *next;
 } Food;
 
+Food *addProductData(char temp[]) {
+    //we enter the first food's number
+    Food *new = NULL;
+    new = (struct Food*)malloc(sizeof(struct Food));
+    char* token = strtok(temp, "\t"); 
+    new->NDB_number = atoi(token);
+
+    //entering the food's name
+    token = strtok(NULL, "\t");
+    strcpy(new->name, token);
+
+    //skipping unnecessary data
+    token = strtok(NULL, "\t");
+    token = strtok(NULL, "\t");
+
+    //entering the manufacturer's name
+    token = strtok(NULL, "\t");
+    strcpy(new->manufacturer, token);
+
+    return new;
+}
+
 int main (int argc, char *argv[]) {
     /*if (argc != 4) {
         printf("Usage: productsfile nutrientsfile servingsizefile");
@@ -30,26 +53,30 @@ int main (int argc, char *argv[]) {
 
     products = fopen(argv[1], "r");
     Food *head = NULL;
+    Food *cur = NULL;
     head = (struct Food*)malloc(sizeof(struct Food));
-    char temp[1000];
+    cur = (struct Food*)malloc(sizeof(struct Food));
+    head->next = NULL;
 
     //getting the titles of the columns out of the way
-    fgets(temp, 105, products);
+    char tempy[1000];
+    fgets(tempy, 105, products);
 
-    //now we enter the first food's number
-    fscanf(products, "%d", &head->NDB_number);
-    printf("%d \n", head->NDB_number);
+    char temp[1000];
+    fgets(temp, 1000, products);
+    head = addProductData(temp);
+    printf("%d number \n %s name \n %s manufacturer \n", head->NDB_number, head->name, head->manufacturer);
+    
 
-    //now the name
-    fscanf(products, "%s", temp);
-    while (strcmp(temp, "LI") != 0) {
-        strcat(head->name, temp);
-        strcat(head->name, " ");
-        fscanf(products, "%s", temp);
+    while (fgets(temp, 1000, products) != NULL) {
+        cur = addProductData(temp);
+        cur->next = head;
+        head = cur;
+        printf("%d number \n %s name \n %s manufacturer \n", head->NDB_number, head->name, head->manufacturer);
     }
 
-    printf("%s \n", head->name);
 
+    fclose(products);
 
     return 0;
 }
