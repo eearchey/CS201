@@ -7,7 +7,7 @@ typedef struct Food {
     char name[200];
     int NDB_number;
     char manufacturer[100];
-    int servingSize;
+    int householdServingSize;
     char servingSizeUnit[50];
 
     //nutrients
@@ -20,7 +20,8 @@ typedef struct Food {
     struct Food *next;
 } Food;
 
-Food *addProductData(char temp[]) {
+Food *addData(char temp[], char tempy[]) {
+    //from product file
     //we enter the first food's number
     Food *new = NULL;
     new = (struct Food*)malloc(sizeof(struct Food));
@@ -39,8 +40,24 @@ Food *addProductData(char temp[]) {
     token = strtok(NULL, "\t");
     strcpy(new->manufacturer, token);
 
+    //from serving size file
+    token = strtok(tempy, "\t");
+
+    //skipping technical serving sizes
+    token = strtok(NULL, "\t");
+    token = strtok(NULL, "\t");
+
+    //enter household serving sizes
+    token = strtok(NULL, "\t");
+    new->householdServingSize = atoi(token);
+    
+    //skip last column
+    token = strtok(NULL, "\t");
+    strcpy(new->servingSizeUnit, token);
+
     return new;
 }
+
 
 int main (int argc, char *argv[]) {
     /*if (argc != 4) {
@@ -52,6 +69,7 @@ int main (int argc, char *argv[]) {
     FILE *serving_size;
 
     products = fopen(argv[1], "r");
+    serving_size = fopen(argv[2], "r");
     Food *head = NULL;
     Food *cur = NULL;
     head = (struct Food*)malloc(sizeof(struct Food));
@@ -59,20 +77,26 @@ int main (int argc, char *argv[]) {
     head->next = NULL;
 
     //getting the titles of the columns out of the way
-    char tempy[1000];
-    fgets(tempy, 105, products);
-
     char temp[1000];
+    char tempy[1000];
+    fgets(temp, 200, products);
+    fgets(tempy, 200, serving_size);
+
     fgets(temp, 1000, products);
-    head = addProductData(temp);
+    fgets(tempy, 1000, serving_size);
+    head = addData(temp, tempy);
+
     printf("%d number \n %s name \n %s manufacturer \n", head->NDB_number, head->name, head->manufacturer);
+    printf("%d serving size \n %s serving size unit \n", head->householdServingSize, head->servingSizeUnit);
     
 
     while (fgets(temp, 1000, products) != NULL) {
-        cur = addProductData(temp);
+        fgets(tempy, 1000, serving_size);
+        cur = addData(temp, tempy);
         cur->next = head;
         head = cur;
         printf("%d number \n %s name \n %s manufacturer \n", head->NDB_number, head->name, head->manufacturer);
+        printf("%d serving size \n %s serving size unit \n", head->householdServingSize, head->servingSizeUnit);
     }
 
 
