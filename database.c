@@ -17,7 +17,7 @@ typedef struct Food {
     int sodium;
 
     struct Food *next;
-};
+} Food;
 
 int main (int argc, char *argv[]) {
     /*if (argc != 4) {
@@ -29,9 +29,9 @@ int main (int argc, char *argv[]) {
     FILE *serving_size;
 
     products = fopen(argv[1], "r");
-    struct Food *head = NULL;
+    Food *head = NULL;
     head = (struct Food*)malloc(sizeof(struct Food));
-    string temp[100];
+    char temp[100];
     fgets(temp, 100, products);
 
     return 0;
