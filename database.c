@@ -77,6 +77,7 @@ int main (int argc, char *argv[]) {
     head->next = NULL;
 
     //getting the titles of the columns out of the way
+    //you can do products and serving sizes at the same time because they line up
     char temp[1000];
     char tempy[1000];
     fgets(temp, 200, products);
@@ -86,8 +87,8 @@ int main (int argc, char *argv[]) {
     fgets(tempy, 1000, serving_size);
     head = addData(temp, tempy);
 
-    printf("%d number \n %s name \n %s manufacturer \n", head->NDB_number, head->name, head->manufacturer);
-    printf("%d serving size \n %s serving size unit \n", head->householdServingSize, head->servingSizeUnit);
+    //printf("%d number \n %s name \n %s manufacturer \n", head->NDB_number, head->name, head->manufacturer);
+    //printf("%d serving size \n %s serving size unit \n", head->householdServingSize, head->servingSizeUnit);
     
 
     while (fgets(temp, 1000, products) != NULL) {
@@ -95,12 +96,12 @@ int main (int argc, char *argv[]) {
         cur = addData(temp, tempy);
         cur->next = head;
         head = cur;
-        printf("%d number \n %s name \n %s manufacturer \n", head->NDB_number, head->name, head->manufacturer);
-        printf("%d serving size \n %s serving size unit \n", head->householdServingSize, head->servingSizeUnit);
+        //printf("%d number \n %s name \n %s manufacturer \n", head->NDB_number, head->name, head->manufacturer);
+        //printf("%d serving size \n %s serving size unit \n", head->householdServingSize, head->servingSizeUnit);
     }
 
-
     fclose(products);
+    fclose(serving_size);
 
     return 0;
 }
