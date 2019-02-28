@@ -54,7 +54,7 @@ void createList(char productsFile[], char serving_sizeFile[], char nutrientsFile
     Food *head = NULL;
     Food *cur = NULL;
     head = (struct Food*)malloc(sizeof(struct Food));
-    cur = (struct Food*)malloc(sizeof(struct Food));
+    //cur = (struct Food*)malloc(sizeof(struct Food));
     head->next = NULL;
 
     //getting the titles of the columns out of the way
@@ -76,8 +76,8 @@ void createList(char productsFile[], char serving_sizeFile[], char nutrientsFile
         cur = addData(temp, tempy);
         cur->next = head;
         head = cur;
-        //printf("%d number \n %s name \n %s manufacturer \n", head->NDB_number, head->name, head->manufacturer);
-        //printf("%d serving size \n %s serving size unit \n", head->householdServingSize, head->servingSizeUnit);
+        printf("%d number \n %s name \n %s manufacturer \n", head->NDB_number, head->name, head->manufacturer);
+        printf("%d serving size \n %s serving size unit \n", head->householdServingSize, head->servingSizeUnit);
     }
 
     fclose(products);
