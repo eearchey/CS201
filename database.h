@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#ifndef DATABASE_H
+#define DATABASE_H
+
 typedef struct Food {
     char name[200];
     int NDB_number;
@@ -105,3 +108,5 @@ int main (int argc, char *argv[]) {
 
     return 0;
 }
+
+#endif
