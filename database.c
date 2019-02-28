@@ -1,27 +1,9 @@
-#ifndef DATABASE_H
-#define DATABASE_H
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include "database.h"
 
-typedef struct Food {
-    char name[200];
-    int NDB_number;
-    char manufacturer[100];
-    int householdServingSize;
-    char servingSizeUnit[50];
-
-    //nutrients
-    int protein;
-    int fat;
-    int sugars;
-    int calories;
-    int sodium;
-
-    struct Food *next;
-} Food;
 
 Food *addData(char temp[], char tempy[]) {
     //from product file
@@ -62,17 +44,13 @@ Food *addData(char temp[], char tempy[]) {
 }
 
 
-int main (int argc, char *argv[]) {
-    /*if (argc != 4) {
-        printf("Usage: productsfile nutrientsfile servingsizefile");
-    }*/
-
-    FILE *nutrients;
+void createList(char productsFile[], char serving_sizeFile[], char nutrientsFile[]) {
     FILE *products;
     FILE *serving_size;
+    FILE *nutrients;
 
-    products = fopen(argv[1], "r");
-    serving_size = fopen(argv[2], "r");
+    products = fopen(productsFile, "r");
+    serving_size = fopen(serving_sizeFile, "r");
     Food *head = NULL;
     Food *cur = NULL;
     head = (struct Food*)malloc(sizeof(struct Food));
@@ -93,7 +71,6 @@ int main (int argc, char *argv[]) {
     //printf("%d number \n %s name \n %s manufacturer \n", head->NDB_number, head->name, head->manufacturer);
     //printf("%d serving size \n %s serving size unit \n", head->householdServingSize, head->servingSizeUnit);
     
-
     while (fgets(temp, 1000, products) != NULL) {
         fgets(tempy, 1000, serving_size);
         cur = addData(temp, tempy);
@@ -106,7 +83,5 @@ int main (int argc, char *argv[]) {
     fclose(products);
     fclose(serving_size);
 
-    return 0;
+    return;
 }
-
-#endif
