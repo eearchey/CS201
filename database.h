@@ -22,4 +22,4 @@ typedef struct Food {
 
 #endif
 
-void createList(char[], char[], char[]); 
+void createTree(char[]); 

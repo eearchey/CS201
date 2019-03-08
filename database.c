@@ -5,53 +5,72 @@
 #include "database.h"
 
 
-Food *addData(char temp[], char tempy[]) {
-    //from product file
-    //we enter the first food's number
+Food *addData(char temp[]) {
+    //reading from file
+
+    //entering the food's ID number
     Food *new = NULL;
     new = (struct Food*)malloc(sizeof(struct Food));
-    char* token = strtok(temp, "\t"); 
-    new->NDB_number = atoi(token);
+    char* token = strtok(temp, "~"); 
+    new->ID = atoi(token);
 
     //entering the food's name
-    token = strtok(NULL, "\t");
+    token = strtok(NULL, "~");
     strcpy(new->name, token);
 
-    //skipping unnecessary data
-    token = strtok(NULL, "\t");
-    token = strtok(NULL, "\t");
-
     //entering the manufacturer's name
-    token = strtok(NULL, "\t");
+    token = strtok(NULL, "~");
     strcpy(new->manufacturer, token);
 
-    //from serving size file
-    token = strtok(tempy, "\t");
+    //entering the amount of calories
+    token = strtok(NULL, "~");
+    new->calories = atof(token);
 
-    //skipping technical serving sizes
-    token = strtok(NULL, "\t");
-    token = strtok(NULL, "\t");
+    //entering the amount of carbs
+    token = strtok(NULL, "~");
+    new->carbs = atof(token);
 
-    //enter household serving sizes
-    token = strtok(NULL, "\t");
-    new->householdServingSize = atoi(token);
-    
-    //skip last column
-    token = strtok(NULL, "\t");
-    strcpy(new->servingSizeUnit, token);
+    //entering the amount of fat
+    token = strtok(NULL, "~");
+    new->fat = atof(token);
+
+    //entering the amount of protein
+    token = strtok(NULL, "~");
+    new->protein = atof(token);
+
+    //entering the serving size (g or mL)
+    token = strtok(NULL, "~");
+    new->serving_size = atof(token);
+
+    //checking if serving size is in g or mL
+    token = strtok(NULL, "~");
+    if (strcmp(token, "g") == 0) {
+        new->isGrams = true;
+    }
+    else {
+        new->isGrams = false;
+    }
+
+    //entering the household serving size
+    token = strtok(NULL, "~");
+    new->house_serving_size = atof(token);
+
+     //entering the household serving size's unit
+    token = strtok(NULL, "~");
+    strcpy(new->house_serving_size_unit, token);
 
     return new;
 }
 
 
-void createList(char productsFile[], char serving_sizeFile[], char nutrientsFile[]) {
-    FILE *food_database;
+void createTree(char file[]) {
+    FILE *foods;
 
-    foods = fopen(food_database, "r");
+    foods = fopen(file, "r");
     Food *root = NULL;
-    Food *cur = NULL;
     root = (struct Food*)malloc(sizeof(struct Food));
-    head->next = NULL;
+    root->leftChild = NULL;
+    root->rightChild = NULL;
 
     
 
