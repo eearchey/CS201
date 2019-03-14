@@ -6,16 +6,13 @@
 
 int main (int argc, char *argv[]) {
     if (argc != 2) {
-        printf("Usage: database_file\n");
+        printf("Usage: ./port database_file\n");
     }
 
     char fileName[100];
     strcpy(fileName, argv[1]);
-
     createTree(fileName);
-
-
-
+    
 
     return 0;
 }

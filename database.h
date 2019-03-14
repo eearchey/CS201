@@ -13,8 +13,7 @@ typedef struct Food {
     float serving_size;
     bool isGrams;
     float house_serving_size;
-    char house_serving_size_unit[100];
-
+    char house_serving_size_unit[1000];
 
     struct Food *leftChild;
     struct Food *rightChild;
