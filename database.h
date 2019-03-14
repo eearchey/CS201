@@ -21,4 +21,5 @@ typedef struct Food {
 
 #endif
 
-void createTree(char[]); 
+void createTree(char[]);
+void editJournal(char[]);

@@ -14,23 +14,12 @@ int main (int argc, char *argv[]) {
     createTree(fileName);
 
     printf("Welcome to your diary!\n");
-    printf("Options:\nView diary\nAdd entry\nUpdate entry\nDelete entry\n");
-    printf("Enter your choice: ");
-    char choice[50];
-    scanf("%s", choice);
 
-    if (strcasestr(choice, "view") != NULL) {
-        printf("You've chosen to view!\n");
-    }
-    else if (strcasestr(choice, "add") != NULL) {
-        printf("You've chosen to add!\n");
-    }
-    else if (strcasestr(choice, "update") != NULL) {
-        printf("You've chosen to update!\n");
-    }
-    else if (strcasestr(choice, "delete") != NULL) {
-        printf("You've chosen to delete!\n");
-    }
+    printf("Who are you?\n");
+    char name[100];
+    scanf("%s", name);
+
+    editJournal(name);
 
     return 0;
 }

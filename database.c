@@ -70,22 +70,26 @@ Food *addData(Food *new, char line[]) {
 }
 
 
+//this function creates the binary search tree that holds the information for each food item
 void createTree(char file[]) {
+    //starts reading from food_database.csv
     FILE *foods;
-
     foods = fopen(file, "r");
+
+    //creates the root
     Food *root = NULL;
     root = (struct Food*)malloc(sizeof(struct Food));
     root->leftChild = root->rightChild = NULL;
-
     char temp[10000];
     fgets(temp, 10000, foods);
     addData(root, temp);
 
+    //this creates the checker node, which is used to see where in the tree the item should be placed, as the tree is sorted by alphabetical order
     Food *checker = NULL;
     checker = (struct Food*)malloc(sizeof(struct Food));
     checker->leftChild = checker->rightChild = NULL;
 
+    //adds nodes to the tree
     while (fgets(temp, 10000, foods) != NULL) {
         fgets(temp, 10000, foods);
         Food *cur = NULL;
@@ -141,7 +145,52 @@ void createTree(char file[]) {
             } 
         }
     }
+
+    //closing files
     free(checker);
     fclose(foods);
+    return;
+}
+
+//this function does the actual editing of the journal for each person
+void editJournal(char name[]) {
+
+    //creating and opening "name.log" file, which contains the journal for each individual person
+    FILE* journal;
+    char filename[50];
+    strcpy(filename, name);
+    strcat(filename, ".log");
+    journal = fopen(filename, "w");
+
+    printf("\nHi %s!\n", name);
+    printf("Here are your options:\nView diary\nAdd entry\nUpdate entry\nDelete entry\nQuit\n");
+    printf("Enter your choice: ");
+    char choice[50];
+    scanf("%s", choice);
+
+    while (1) {
+        if (strcasestr(choice, "view") != NULL) {
+            fprintf(journal, "You've chosen to view!\n");
+        }
+        else if (strcasestr(choice, "add") != NULL) {
+            fprintf(journal, "You've chosen to add!\n");
+        }
+        else if (strcasestr(choice, "update") != NULL) {
+            fprintf(journal, "You've chosen to update!\n");
+        }
+        else if (strcasestr(choice, "delete") != NULL) {
+            fprintf(journal, "You've chosen to delete!\n");
+        }
+        else if (strcasestr(choice, "quit") != NULL) {
+            break;
+        }
+        else {
+            printf("Sorry, that is not an available option. Please choose to view, add, update, delete, or quit.\n");
+        }
+
+        printf("Enter your choice: ");
+        scanf("%s", choice);
+    }
+
     return;
 }
