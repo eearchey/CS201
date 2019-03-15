@@ -71,15 +71,12 @@ Food *addData(Food *new, char line[]) {
 
 
 //this function creates the binary search tree that holds the information for each food item
-void createTree(char file[]) {
+void createTree(char file[], Food *root) {
     //starts reading from food_database.csv
     FILE *foods;
     foods = fopen(file, "r");
 
     //creates the root
-    Food *root = NULL;
-    root = (struct Food*)malloc(sizeof(struct Food));
-    root->leftChild = root->rightChild = NULL;
     char temp[10000];
     fgets(temp, 10000, foods);
     addData(root, temp);
@@ -152,8 +149,23 @@ void createTree(char file[]) {
     return;
 }
 
+Food *addEntry(Food *newEntry, char food[1000]) {
+    return newEntry;
+}
+
+void search(Food *cur, char food[]) {
+    if (cur == NULL) {
+        return;
+    }
+    else if (strcasestr(food, cur->name) != NULL) {
+        printf("Food: %s, Brand: %s\n", cur->name, cur->manufacturer);
+    }
+    search(cur->leftChild, food);
+    search(cur->rightChild, food);
+}
+
 //this function does the actual editing of the journal for each person
-void editJournal(char name[]) {
+void editJournal(char name[], Food* root) {
 
     //creating and opening "name.log" file, which contains the journal for each individual person
     FILE* journal;
@@ -163,14 +175,23 @@ void editJournal(char name[]) {
     journal = fopen(filename, "w");
 
     printf("\nHi %s!\n", name);
-    printf("Here are your options:\nView diary\nAdd entry\nUpdate entry\nDelete entry\nQuit\n");
+    printf("Here are your options:\nView diary\nSearch for food\nAdd entry\nUpdate entry\nDelete entry\nQuit\n");
     printf("Enter your choice: ");
     char choice[50];
     scanf("%s", choice);
+    scanf("%[^\n]s", choice);
 
     while (1) {
         if (strcasestr(choice, "view") != NULL) {
             fprintf(journal, "You've chosen to view!\n");
+        }
+        else if (strcasestr(choice, "search") != NULL) {
+            char food[1000];
+            printf("What did you eat?\n");
+            scanf("%s", food);
+            scanf("%[^\n]s", food);
+            printf("\n");
+            search(root, food);
         }
         else if (strcasestr(choice, "add") != NULL) {
             fprintf(journal, "You've chosen to add!\n");
@@ -185,9 +206,10 @@ void editJournal(char name[]) {
             break;
         }
         else {
-            printf("Sorry, that is not an available option. Please choose to view, add, update, delete, or quit.\n");
+            printf("Sorry, that is not an available option. Please choose to view, search, update, delete, or quit.\n");
         }
 
+        printf("\nHere are your options:\nView diary\nSearch for food\nUpdate entry\nDelete entry\nQuit\n");
         printf("Enter your choice: ");
         scanf("%s", choice);
     }
