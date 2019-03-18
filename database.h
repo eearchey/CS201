@@ -15,6 +15,8 @@ typedef struct Food {
     float house_serving_size;
     char house_serving_size_unit[1000];
 
+    char meal[20];
+
     struct Food *leftChild;
     struct Food *rightChild;
 } Food;
