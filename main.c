@@ -21,7 +21,7 @@ int main (int argc, char *argv[]) {
 
     printf("Who are you?\n");
     char name[100];
-    scanf("%s", name);
+    scanf("%[^\n]%*c", name);
 
     while(1) {
         editJournal(name, root);

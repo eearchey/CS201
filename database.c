@@ -149,6 +149,43 @@ void createTree(char file[], Food *root) {
     return;
 }
 
+void writeToLog(char filename[], Food* head) {
+    printf("entered write to log\n");
+    FILE *journal = fopen(filename, "w");
+    Food *current = NULL;
+    current = (struct Food*)malloc(sizeof(struct Food));
+
+    fprintf(journal, "Breakfast:\n");
+    while(current != NULL) {
+        if (strcmp(current->meal, "breakfast") == 0) {
+            fprintf(journal, "%s\n", current->name);
+        }
+        current = current->leftChild;
+    }
+    fprintf(journal, "Lunch:\n");
+    while(current != NULL) {
+        if (strcmp(current->meal, "lunch") == 0) {
+            fprintf(journal, "%s\n", current->name);
+        }
+        current = current->leftChild;
+    }
+    fprintf(journal, "Dinner:\n");
+    while(current != NULL) {
+        if (strcmp(current->meal, "dinner") == 0) {
+            fprintf(journal, "%s\n", current->name);
+        }
+        current = current->leftChild;
+    }
+    fprintf(journal, "Snacks:\n");
+    while(current != NULL) {
+        if (strcmp(current->meal, "snack") == 0) {
+            fprintf(journal, "%s\n", current->name);
+        }
+        current = current->leftChild;
+    }
+    return;
+}
+
 Food *addEntry(Food *cur, char food[], char brand[]) {
     if (cur == NULL) {
         printf("Food not found\n");
@@ -158,9 +195,21 @@ Food *addEntry(Food *cur, char food[], char brand[]) {
         printf("FOUND\n");
         return cur;
     }
+    if (strcasecmp(food, cur->name) == 0) {
+        addEntry(cur->leftChild, food, brand);
+    }
 
-    if (isupper(cur->name[0])) {
-        if (toupper(food[0]) <= cur->name[0]) {
+    else if (isupper(cur->name[0])) {
+        int i = 0;
+        if (toupper(food[0]) == cur->name[0]) {
+            while (i < strlen(cur->name) && i < strlen(food)) {
+                    if (cur->name[i] != toupper(food[i])) {
+                        break;
+                    }
+                    i++;
+            }
+        }
+        if (toupper(food[i]) < cur->name[i]) {
             addEntry(cur->leftChild, food, brand);
         }
         else {
@@ -168,25 +217,41 @@ Food *addEntry(Food *cur, char food[], char brand[]) {
         }
     }
     else {
-        if ((food[0]) <= cur->name[0]) {
+        int j = 0;
+        if ((food[0]) == cur->name[0]) {
+            while (j < strlen(cur->name) && j < strlen(food)) {
+                    if (cur->name[j] != food[j]) {
+                        break;
+                    }
+                    j++;
+                }
+        }
+        if ((food[j]) < cur->name[j]) {
             addEntry(cur->leftChild, food, brand);
         }
         else {
             addEntry(cur->rightChild, food, brand);
         }
     }
-    return NULL;
+    return cur;
 }
 
-void search(Food *cur, char food[]) {
+void search(Food *cur, char food[], char brand[]) {
     if (cur == NULL) {
         return;
     }
-    else if (strcasestr(food, cur->name) != NULL) {
+    
+    else if (strcmp(brand, "unknown") == 0) {
+            if (strcasestr(cur->name, food) != NULL) {
+            printf("Food: %s, Brand: %s\n", cur->name, cur->manufacturer);
+            }
+    }
+    
+    else if ((strcasestr(cur->name, food) != NULL) && (strcasestr(cur->manufacturer, brand) != NULL)) {
         printf("Food: %s, Brand: %s\n", cur->name, cur->manufacturer);
     }
-    search(cur->leftChild, food);
-    search(cur->rightChild, food);
+    search(cur->leftChild, food, brand);
+    search(cur->rightChild, food, brand);
 }
 
 //this function does the actual editing of the journal for each person
@@ -197,69 +262,87 @@ void editJournal(char name[], Food* root) {
     char filename[50];
     strcpy(filename, name);
     strcat(filename, ".log");
-    journal = fopen(filename, "w");
+    //journal = fopen(filename, "w");
     
-
+    //opening choice menu
     printf("\nHi %s!\n", name);
     printf("Here are your options:\nView diary\nSearch for food\nAdd entry\nUpdate entry\nDelete entry\nQuit\n");
     printf("Enter your choice: ");
     char choice[50];
-    scanf("%s", choice);
-    scanf("%[^\n]s", choice);
+    scanf("%[^\n]%*c", choice);
 
     Food *head = NULL;
     head = (struct Food*)malloc(sizeof(struct Food));
     head->leftChild = head->rightChild = NULL;
 
     while (1) {
+        //view diary
         if (strcasestr(choice, "view") != NULL) {
             fprintf(journal, "You've chosen to view!\n");
         }
 
+        //search foods
         else if (strcasestr(choice, "search") != NULL) {
             char food[1000];
-            printf("What did you eat?\n");
-            scanf("%s", food);
-            scanf("%[^\n]s", food);
-            printf("\n");
-            search(root, food);
+            char brand[1000];
+            printf("Do you know the brand?\n");
+            char yn[10];
+            scanf("%s%*c", yn);
+            if (strcasecmp(yn, "yes") == 0) {
+                printf("What is the brand name?\n");
+                scanf("%[^\n]%*c", brand);
+                printf("What did you eat?\n");
+                scanf("%[^\n]%*c", food);
+                printf("\n");
+                search(root, food, brand);
+            }
+            else {
+                printf("What did you eat?\n");
+                scanf("%[^\n]%*c", food);
+                printf("\n");
+                search(root, food, "unknown");
+            }
         }
 
+        //add entry to diary
         else if (strcasestr(choice, "add") != NULL) {
             printf("Enter the exact name of the food and the brand (if you don't know them, you can use the search function).\n");
             printf("Do you know the name and brand of the food? Enter yes or no (no will return you to the choice selection).\n");
             char understood[10];
-            scanf("%s", understood);
+            scanf("%s%*c", understood);
+
             if (strcasecmp(understood, "yes") != 0) {
                 printf("\nHere are your options:\nView diary\nSearch for food\nUpdate entry\nDelete entry\nQuit\n");
                 printf("Enter your choice: ");
-                scanf("%s", choice);
+                scanf("%s%*c", choice);
                 continue;
             }
+        
             printf("Food name: ");
             char foodName[1000];
-            scanf("%s", foodName);
-            scanf("%[^\n]s", foodName);
+            scanf("%[^\n]%*c", foodName);
             printf("Brand name: ");
             char brandName[1000];
-            scanf("%s", brandName);
-            scanf("%[^\n]s", brandName);
+            scanf("%[^\n]%*c", brandName);
 
             Food *newEntry = NULL;
             newEntry = (struct Food*)malloc(sizeof(struct Food));
             newEntry = addEntry(root, foodName, brandName);
+            
             if (newEntry == NULL) {
                 printf("\nHere are your options:\nView diary\nSearch for food\nUpdate entry\nDelete entry\nQuit\n");
                 printf("Enter your choice: ");
                 scanf("%s", choice);
                 continue;
             }
+
             newEntry->leftChild = newEntry->rightChild = NULL;
             newEntry->leftChild = head;
             head = newEntry;
+
             printf("Did you eat this for breakfast, lunch, dinner, or a snack?");
             char meal[40];
-            scanf("%s", meal);
+            scanf("%s%*c", meal);
             if (strcasecmp(meal, "breakfast") == 0) {
                 strcpy(head->meal, "breakfast");
             }
@@ -274,16 +357,27 @@ void editJournal(char name[], Food* root) {
                 strcpy(head->meal, "snack");
             }
 
+            writeToLog(filename, head);
+
         }
+
+        //update previous entry
         else if (strcasestr(choice, "update") != NULL) {
             fprintf(journal, "You've chosen to update!\n");
         }
+
+        //delete entry
         else if (strcasestr(choice, "delete") != NULL) {
             fprintf(journal, "You've chosen to delete!\n");
         }
+
+        //quit
         else if (strcasestr(choice, "quit") != NULL) {
+            free(head);
             break;
         }
+
+        //if they entered an invalid option
         else {
             printf("Sorry, that is not an available option. Please choose to view, search, update, delete, or quit.\n");
         }
