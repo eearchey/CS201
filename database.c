@@ -150,13 +150,13 @@ void createTree(char file[], Food *root) {
 }
 
 void writeToLog(char filename[], Food* head) {
-    printf("entered write to log\n");
     FILE *journal = fopen(filename, "w");
     Food *current = NULL;
     current = (struct Food*)malloc(sizeof(struct Food));
+    current = head;
 
     fprintf(journal, "Breakfast:\n");
-    while(current != NULL) {
+    while (current != NULL) {
         if (strcmp(current->meal, "breakfast") == 0) {
             fprintf(journal, "%s\n", current->name);
         }
@@ -183,6 +183,7 @@ void writeToLog(char filename[], Food* head) {
         }
         current = current->leftChild;
     }
+    fclose(journal);
     return;
 }
 
@@ -196,7 +197,7 @@ Food *addEntry(Food *cur, char food[], char brand[]) {
         return cur;
     }
     if (strcasecmp(food, cur->name) == 0) {
-        addEntry(cur->leftChild, food, brand);
+        cur = addEntry(cur->leftChild, food, brand);
     }
 
     else if (isupper(cur->name[0])) {
@@ -210,10 +211,10 @@ Food *addEntry(Food *cur, char food[], char brand[]) {
             }
         }
         if (toupper(food[i]) < cur->name[i]) {
-            addEntry(cur->leftChild, food, brand);
+            cur = addEntry(cur->leftChild, food, brand);
         }
         else {
-            addEntry(cur->rightChild, food, brand);
+            cur = addEntry(cur->rightChild, food, brand);
         }
     }
     else {
@@ -227,10 +228,10 @@ Food *addEntry(Food *cur, char food[], char brand[]) {
                 }
         }
         if ((food[j]) < cur->name[j]) {
-            addEntry(cur->leftChild, food, brand);
+            cur = addEntry(cur->leftChild, food, brand);
         }
         else {
-            addEntry(cur->rightChild, food, brand);
+            cur = addEntry(cur->rightChild, food, brand);
         }
     }
     return cur;
@@ -262,7 +263,11 @@ void editJournal(char name[], Food* root) {
     char filename[50];
     strcpy(filename, name);
     strcat(filename, ".log");
-    //journal = fopen(filename, "w");
+    
+    journal = fopen(filename, "r");
+    if (journal != NULL) {
+        //read data from journal file
+    }
     
     //opening choice menu
     printf("\nHi %s!\n", name);
@@ -278,7 +283,20 @@ void editJournal(char name[], Food* root) {
     while (1) {
         //view diary
         if (strcasestr(choice, "view") != NULL) {
-            fprintf(journal, "You've chosen to view!\n");
+            journal = fopen(filename, "r");
+            if (journal == NULL) {
+                printf("\nDiary is empty.\n");
+                printf("\nHere are your options:\nView diary\nSearch for food\nUpdate entry\nDelete entry\nQuit\n");
+                printf("Enter your choice: ");
+                scanf("%s%*c", choice);
+                continue;
+            }
+
+            printf("\n");
+            char temp[1000];
+            while (fgets(temp, 10000, journal) != NULL) {
+                printf("%s", temp);
+            }
         }
 
         //search foods
@@ -340,7 +358,7 @@ void editJournal(char name[], Food* root) {
             newEntry->leftChild = head;
             head = newEntry;
 
-            printf("Did you eat this for breakfast, lunch, dinner, or a snack?");
+            printf("Did you eat this for breakfast, lunch, dinner, or a snack?\n");
             char meal[40];
             scanf("%s%*c", meal);
             if (strcasecmp(meal, "breakfast") == 0) {
