@@ -88,7 +88,6 @@ void createTree(char file[], Food *root) {
 
     //adds nodes to the tree
     while (fgets(temp, 10000, foods) != NULL) {
-        fgets(temp, 10000, foods);
         Food *cur = NULL;
         cur = (struct Food*)malloc(sizeof(struct Food));
         cur->leftChild = cur->rightChild = NULL;
@@ -149,8 +148,15 @@ void createTree(char file[], Food *root) {
     return;
 }
 
+Food *readFromPrevJournal(Food *new, char line[], char filename[]) {
+    FILE *prevDiary = fopen(filename, "r");
+    //fix after write to log has all
+    return new;
+}
+
+
 void writeToLog(char filename[], Food* head) {
-    FILE *journal = fopen(filename, "w");
+    FILE *journal = fopen(filename, "w+");
     Food *current = NULL;
     current = (struct Food*)malloc(sizeof(struct Food));
     current = head;
@@ -159,29 +165,83 @@ void writeToLog(char filename[], Food* head) {
     while (current != NULL) {
         if (strcmp(current->meal, "breakfast") == 0) {
             fprintf(journal, "%s\n", current->name);
+            fprintf(journal, "%s\n", current->manufacturer);
+            fprintf(journal, "Calories: %f\n", current->calories);
+            fprintf(journal, "Carbs: %f\n", current->carbs);
+            fprintf(journal, "Fat: %f\n", current->fat);
+            fprintf(journal, "Protein: %f\n", current->protein);
+            if (current->isGrams == true) {
+                fprintf(journal, "Serving Size: %f grams\n", current->serving_size);
+            }
+            else {
+                fprintf(journal, "Serving Size: %f mL\n", current->serving_size);
+            }
+            fprintf(journal, "Household Serving Size: %f %s\n", current->house_serving_size, current->house_serving_size_unit);
         }
-        current = current->leftChild;
+        current = current->nextFood;
     }
-    fprintf(journal, "Lunch:\n");
+
+    current = head;
+    fprintf(journal, "\nLunch:\n");
     while(current != NULL) {
         if (strcmp(current->meal, "lunch") == 0) {
             fprintf(journal, "%s\n", current->name);
+            fprintf(journal, "%s\n", current->manufacturer);
+            fprintf(journal, "Calories: %f\n", current->calories);
+            fprintf(journal, "Carbs: %f\n", current->carbs);
+            fprintf(journal, "Fat: %f\n", current->fat);
+            fprintf(journal, "Protein: %f\n", current->protein);
+            if (current->isGrams == true) {
+                fprintf(journal, "Serving Size: %f grams\n", current->serving_size);
+            }
+            else {
+                fprintf(journal, "Serving Size: %f mL\n", current->serving_size);
+            }
+            fprintf(journal, "Household Serving Size: %f %s\n", current->house_serving_size, current->house_serving_size_unit);
         }
-        current = current->leftChild;
+        current = current->nextFood;
     }
-    fprintf(journal, "Dinner:\n");
+
+    current = head;
+    fprintf(journal, "\nDinner:\n");
     while(current != NULL) {
         if (strcmp(current->meal, "dinner") == 0) {
             fprintf(journal, "%s\n", current->name);
+            fprintf(journal, "%s\n", current->manufacturer);
+            fprintf(journal, "Calories: %f\n", current->calories);
+            fprintf(journal, "Carbs: %f\n", current->carbs);
+            fprintf(journal, "Fat: %f\n", current->fat);
+            fprintf(journal, "Protein: %f\n", current->protein);
+            if (current->isGrams == true) {
+                fprintf(journal, "Serving Size: %f grams\n", current->serving_size);
+            }
+            else {
+                fprintf(journal, "Serving Size: %f mL\n", current->serving_size);
+            }
+            fprintf(journal, "Household Serving Size: %f %s\n", current->house_serving_size, current->house_serving_size_unit);
         }
-        current = current->leftChild;
+        current = current->nextFood;
     }
-    fprintf(journal, "Snacks:\n");
+
+    current = head;
+    fprintf(journal, "\nSnacks:\n");
     while(current != NULL) {
         if (strcmp(current->meal, "snack") == 0) {
             fprintf(journal, "%s\n", current->name);
+            fprintf(journal, "%s\n", current->manufacturer);
+            fprintf(journal, "Calories: %f\n", current->calories);
+            fprintf(journal, "Carbs: %f\n", current->carbs);
+            fprintf(journal, "Fat: %f\n", current->fat);
+            fprintf(journal, "Protein: %f\n", current->protein);
+            if (current->isGrams == true) {
+                fprintf(journal, "Serving Size: %f grams\n", current->serving_size);
+            }
+            else {
+                fprintf(journal, "Serving Size: %f mL\n", current->serving_size);
+            }
+            fprintf(journal, "Household Serving Size: %f %s\n", current->house_serving_size, current->house_serving_size_unit);
         }
-        current = current->leftChild;
+        current = current->nextFood;
     }
     fclose(journal);
     return;
@@ -192,10 +252,11 @@ Food *addEntry(Food *cur, char food[], char brand[]) {
         printf("Food not found\n");
         return NULL;
     }
-    else if (strcasestr(food, cur->name) != NULL && strcasestr(brand, cur->manufacturer) != NULL) {
-        printf("FOUND\n");
+
+    else if ((strcasestr(cur->name, food) != NULL) && (strcasestr(cur->manufacturer, brand) != NULL)) {
         return cur;
     }
+
     if (strcasecmp(food, cur->name) == 0) {
         cur = addEntry(cur->leftChild, food, brand);
     }
@@ -241,7 +302,6 @@ void search(Food *cur, char food[], char brand[]) {
     if (cur == NULL) {
         return;
     }
-    
     else if (strcmp(brand, "unknown") == 0) {
             if (strcasestr(cur->name, food) != NULL) {
             printf("Food: %s, Brand: %s\n", cur->name, cur->manufacturer);
@@ -258,15 +318,36 @@ void search(Food *cur, char food[], char brand[]) {
 //this function does the actual editing of the journal for each person
 void editJournal(char name[], Food* root) {
 
-    //creating and opening "name.log" file, which contains the journal for each individual person
+    //creating the name of the .log file
     FILE* journal;
     char filename[50];
     strcpy(filename, name);
     strcat(filename, ".log");
+    char yn[10];
+    char temp[1000];
+    Food *head = NULL;
+    head = (struct Food*)malloc(sizeof(struct Food));
+    head->leftChild = head->rightChild = NULL;
+    Food *cur = NULL;
+    cur = (struct Food*)malloc(sizeof(struct Food));
+    cur->leftChild = cur->rightChild = NULL;
     
     journal = fopen(filename, "r");
     if (journal != NULL) {
-        //read data from journal file
+        fclose(journal);
+        printf("Is this your diary?\n");
+        printf("%s", filename);
+        scanf("%[^\n]%*c", yn);
+        if (strcasecmp(yn, "yes") == 0) {
+            while (fgets(temp, 10000, journal) != NULL) {
+                if (((strcmp(temp, "Breakfast:\n") == 0) || strcmp(temp, "Lunch:\n") == 0 || strcmp(temp, "Dinner:\n") == 0 || strcmp(temp, "Snacks:\n") == 0)) {
+                    continue;
+                }
+            readFromPrevJournal(cur, temp,filename);
+            cur->nextFood = head;
+            head = cur;
+            }
+        }
     }
     
     //opening choice menu
@@ -275,10 +356,6 @@ void editJournal(char name[], Food* root) {
     printf("Enter your choice: ");
     char choice[50];
     scanf("%[^\n]%*c", choice);
-
-    Food *head = NULL;
-    head = (struct Food*)malloc(sizeof(struct Food));
-    head->leftChild = head->rightChild = NULL;
 
     while (1) {
         //view diary
@@ -291,11 +368,11 @@ void editJournal(char name[], Food* root) {
                 scanf("%s%*c", choice);
                 continue;
             }
-
-            printf("\n");
-            char temp[1000];
-            while (fgets(temp, 10000, journal) != NULL) {
-                printf("%s", temp);
+            else {
+                printf("\n");
+                while (fgets(temp, 10000, journal) != NULL) {
+                    printf("%s", temp);
+                }
             }
         }
 
@@ -304,7 +381,6 @@ void editJournal(char name[], Food* root) {
             char food[1000];
             char brand[1000];
             printf("Do you know the brand?\n");
-            char yn[10];
             scanf("%s%*c", yn);
             if (strcasecmp(yn, "yes") == 0) {
                 printf("What is the brand name?\n");
@@ -354,8 +430,7 @@ void editJournal(char name[], Food* root) {
                 continue;
             }
 
-            newEntry->leftChild = newEntry->rightChild = NULL;
-            newEntry->leftChild = head;
+            newEntry->nextFood = head;
             head = newEntry;
 
             printf("Did you eat this for breakfast, lunch, dinner, or a snack?\n");

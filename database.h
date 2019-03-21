@@ -19,6 +19,7 @@ typedef struct Food {
 
     struct Food *leftChild;
     struct Food *rightChild;
+    struct Food *nextFood;
 } Food;
 
 #endif
