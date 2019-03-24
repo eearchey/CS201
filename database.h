@@ -17,6 +17,8 @@ typedef struct Food {
 
     char meal[20];
 
+    int servings;
+
     struct Food *leftChild;
     struct Food *rightChild;
     struct Food *nextFood;

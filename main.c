@@ -23,10 +23,10 @@ int main (int argc, char *argv[]) {
     char name[100];
     scanf("%[^\n]%*c", name);
 
-    while(1) {
+    while (1) {
         editJournal(name, root);
         printf("If you want to edit or view another user's journal, enter their name here. If not, then enter quit again.\n");
-        scanf("%s", name);
+        scanf("%s", name); 
         if (strcasestr(name, "quit") != NULL) {
             break;
         }

@@ -148,16 +148,97 @@ void createTree(char file[], Food *root) {
     return;
 }
 
-Food *readFromPrevJournal(Food *new, char line[], char filename[]) {
+Food *getDataFromPrevJournal(Food *cur, char name[], FILE *prevDiary) {
+    char throwaway[50];
+    strncpy(cur->name, name, strlen(name) - 1);
+
+    fscanf(prevDiary, "%[^\n]%*c", cur->manufacturer);
+
+    fscanf(prevDiary, "%s", throwaway);
+    fscanf(prevDiary, "%f", &cur->calories);
+    fscanf(prevDiary, "%s", throwaway);
+
+    fscanf(prevDiary, "%s", throwaway);
+    fscanf(prevDiary, "%f", &cur->carbs);
+    fscanf(prevDiary, "%s", throwaway);
+
+    fscanf(prevDiary, "%s", throwaway);
+    fscanf(prevDiary, "%f", &cur->fat);
+    fscanf(prevDiary, "%s", throwaway);
+
+    fscanf(prevDiary, "%s", throwaway);
+    fscanf(prevDiary, "%f", &cur->protein);
+    fscanf(prevDiary, "%s", throwaway);
+
+    fscanf(prevDiary, "%s", throwaway);
+    fscanf(prevDiary, "%s", throwaway);
+    fscanf(prevDiary, "%f%*c", &cur->serving_size);
+    fscanf(prevDiary, "%s", throwaway);
+
+    fscanf(prevDiary, "%s", throwaway);
+    fscanf(prevDiary, "%s", throwaway);
+    fscanf(prevDiary, "%s", throwaway);
+    fscanf(prevDiary, "%f%*c", &cur->house_serving_size);
+    fscanf(prevDiary, "%s%*c", cur->house_serving_size_unit);
+    return cur;
+}
+
+Food *readFromPrevJournal(Food *first, char filename[]) {
     FILE *prevDiary = fopen(filename, "r");
-    //fix after write to log has all
-    return new;
+    Food *cur = (struct Food*)malloc(sizeof(struct Food));
+    char temp[1000];
+    //getting breakfast header
+    fgets(temp, 10000, prevDiary);
+
+    //now reading data
+    while (strcmp(fgets(temp, 10000, prevDiary), "\n") != 0) {
+        cur = getDataFromPrevJournal(cur, temp, prevDiary);
+        strcpy(cur->meal, "breakfast");
+        cur->nextFood = first;
+        first = cur;
+        fgets(temp, 10000, prevDiary);
+    }
+
+    //lunch header
+    fgets(temp, 1000, prevDiary);
+    //getting lunch
+    while (strcmp(fgets(temp, 10000, prevDiary), "\n") != 0) {
+        cur = getDataFromPrevJournal(cur, temp, prevDiary);
+        strcpy(cur->meal, "lunch");
+        cur->nextFood = first;
+        first = cur;
+        fgets(temp, 10000, prevDiary);
+    }
+
+    //dinner header
+    fgets(temp, 1000, prevDiary);
+    //getting dinner
+    while (strcmp(fgets(temp, 10000, prevDiary), "\n") != 0) {
+        cur = getDataFromPrevJournal(cur, temp, prevDiary);
+        strcpy(cur->meal, "dinner");
+        cur->nextFood = first;
+        first = cur;
+        fgets(temp, 10000, prevDiary);
+    }
+
+    //snacks header
+    fgets(temp, 1000, prevDiary);
+    //getting snacks
+    while (fgets(temp, 10000, prevDiary) != NULL) {
+        cur = getDataFromPrevJournal(cur, temp, prevDiary);
+        strcpy(cur->meal, "snack");
+        cur->nextFood = first;
+        first = cur;
+        fgets(temp, 10000, prevDiary);
+    }
+
+    return first;
 }
 
 
 void writeToLog(char filename[], Food* head) {
     FILE *journal = fopen(filename, "w+");
-    Food *current = NULL;
+    Food *current;
     current = (struct Food*)malloc(sizeof(struct Food));
     current = head;
 
@@ -166,17 +247,17 @@ void writeToLog(char filename[], Food* head) {
         if (strcmp(current->meal, "breakfast") == 0) {
             fprintf(journal, "%s\n", current->name);
             fprintf(journal, "%s\n", current->manufacturer);
-            fprintf(journal, "Calories: %f\n", current->calories);
-            fprintf(journal, "Carbs: %f\n", current->carbs);
-            fprintf(journal, "Fat: %f\n", current->fat);
-            fprintf(journal, "Protein: %f\n", current->protein);
+            fprintf(journal, "Calories: %g kcal\n", current->calories);
+            fprintf(journal, "Carbs: %g grams\n", current->carbs);
+            fprintf(journal, "Fat: %g grams\n", current->fat);
+            fprintf(journal, "Protein: %g grams\n", current->protein);
             if (current->isGrams == true) {
-                fprintf(journal, "Serving Size: %f grams\n", current->serving_size);
+                fprintf(journal, "Serving Size: %g grams\n", current->serving_size);
             }
             else {
-                fprintf(journal, "Serving Size: %f mL\n", current->serving_size);
+                fprintf(journal, "Serving Size: %g mL\n", current->serving_size);
             }
-            fprintf(journal, "Household Serving Size: %f %s\n", current->house_serving_size, current->house_serving_size_unit);
+            fprintf(journal, "Household Serving Size: %g %s\n", current->house_serving_size, current->house_serving_size_unit);
         }
         current = current->nextFood;
     }
@@ -187,17 +268,17 @@ void writeToLog(char filename[], Food* head) {
         if (strcmp(current->meal, "lunch") == 0) {
             fprintf(journal, "%s\n", current->name);
             fprintf(journal, "%s\n", current->manufacturer);
-            fprintf(journal, "Calories: %f\n", current->calories);
-            fprintf(journal, "Carbs: %f\n", current->carbs);
-            fprintf(journal, "Fat: %f\n", current->fat);
-            fprintf(journal, "Protein: %f\n", current->protein);
+            fprintf(journal, "Calories: %g kcal\n", current->calories);
+            fprintf(journal, "Carbs: %g grams\n", current->carbs);
+            fprintf(journal, "Fat: %g grams\n", current->fat);
+            fprintf(journal, "Protein: %g grams\n", current->protein);
             if (current->isGrams == true) {
-                fprintf(journal, "Serving Size: %f grams\n", current->serving_size);
+                fprintf(journal, "Serving Size: %g grams\n", current->serving_size);
             }
             else {
-                fprintf(journal, "Serving Size: %f mL\n", current->serving_size);
+                fprintf(journal, "Serving Size: %g mL\n", current->serving_size);
             }
-            fprintf(journal, "Household Serving Size: %f %s\n", current->house_serving_size, current->house_serving_size_unit);
+            fprintf(journal, "Household Serving Size: %g %s\n", current->house_serving_size, current->house_serving_size_unit);
         }
         current = current->nextFood;
     }
@@ -208,17 +289,17 @@ void writeToLog(char filename[], Food* head) {
         if (strcmp(current->meal, "dinner") == 0) {
             fprintf(journal, "%s\n", current->name);
             fprintf(journal, "%s\n", current->manufacturer);
-            fprintf(journal, "Calories: %f\n", current->calories);
-            fprintf(journal, "Carbs: %f\n", current->carbs);
-            fprintf(journal, "Fat: %f\n", current->fat);
-            fprintf(journal, "Protein: %f\n", current->protein);
+            fprintf(journal, "Calories: %g kcal\n", current->calories);
+            fprintf(journal, "Carbs: %g grams\n", current->carbs);
+            fprintf(journal, "Fat: %g grams\n", current->fat);
+            fprintf(journal, "Protein: %g grams\n", current->protein);
             if (current->isGrams == true) {
-                fprintf(journal, "Serving Size: %f grams\n", current->serving_size);
+                fprintf(journal, "Serving Size: %g grams\n", current->serving_size);
             }
             else {
-                fprintf(journal, "Serving Size: %f mL\n", current->serving_size);
+                fprintf(journal, "Serving Size: %g mL\n", current->serving_size);
             }
-            fprintf(journal, "Household Serving Size: %f %s\n", current->house_serving_size, current->house_serving_size_unit);
+            fprintf(journal, "Household Serving Size: %g %s\n", current->house_serving_size, current->house_serving_size_unit);
         }
         current = current->nextFood;
     }
@@ -229,17 +310,17 @@ void writeToLog(char filename[], Food* head) {
         if (strcmp(current->meal, "snack") == 0) {
             fprintf(journal, "%s\n", current->name);
             fprintf(journal, "%s\n", current->manufacturer);
-            fprintf(journal, "Calories: %f\n", current->calories);
-            fprintf(journal, "Carbs: %f\n", current->carbs);
-            fprintf(journal, "Fat: %f\n", current->fat);
-            fprintf(journal, "Protein: %f\n", current->protein);
+            fprintf(journal, "Calories: %g kcal\n", current->calories);
+            fprintf(journal, "Carbs: %g grams\n", current->carbs);
+            fprintf(journal, "Fat: %g grams\n", current->fat);
+            fprintf(journal, "Protein: %g grams\n", current->protein);
             if (current->isGrams == true) {
-                fprintf(journal, "Serving Size: %f grams\n", current->serving_size);
+                fprintf(journal, "Serving Size: %g grams\n", current->serving_size);
             }
             else {
-                fprintf(journal, "Serving Size: %f mL\n", current->serving_size);
+                fprintf(journal, "Serving Size: %g mL\n", current->serving_size);
             }
-            fprintf(journal, "Household Serving Size: %f %s\n", current->house_serving_size, current->house_serving_size_unit);
+            fprintf(journal, "Household Serving Size: %g %s\n", current->house_serving_size, current->house_serving_size_unit);
         }
         current = current->nextFood;
     }
@@ -336,17 +417,10 @@ void editJournal(char name[], Food* root) {
     if (journal != NULL) {
         fclose(journal);
         printf("Is this your diary?\n");
-        printf("%s", filename);
+        printf("%s\n", filename);
         scanf("%[^\n]%*c", yn);
         if (strcasecmp(yn, "yes") == 0) {
-            while (fgets(temp, 10000, journal) != NULL) {
-                if (((strcmp(temp, "Breakfast:\n") == 0) || strcmp(temp, "Lunch:\n") == 0 || strcmp(temp, "Dinner:\n") == 0 || strcmp(temp, "Snacks:\n") == 0)) {
-                    continue;
-                }
-            readFromPrevJournal(cur, temp,filename);
-            cur->nextFood = head;
-            head = cur;
-            }
+            head = readFromPrevJournal(head, filename);
         }
     }
     
@@ -421,7 +495,21 @@ void editJournal(char name[], Food* root) {
 
             Food *newEntry = NULL;
             newEntry = (struct Food*)malloc(sizeof(struct Food));
-            newEntry = addEntry(root, foodName, brandName);
+            newEntry->nextFood = NULL;
+            cur = addEntry(root, foodName, brandName);
+
+            newEntry->ID = cur->ID;
+            strcpy(newEntry->name, cur->name);
+            strcpy(newEntry->manufacturer, cur->manufacturer);
+            newEntry->calories = cur->calories;
+            newEntry->carbs = cur->carbs;
+            newEntry->fat = cur->fat;
+            newEntry->protein = cur->protein;
+            newEntry->serving_size = cur->serving_size;
+            newEntry->isGrams = cur->isGrams;
+            newEntry->house_serving_size = cur->house_serving_size;
+            strcpy(newEntry->house_serving_size_unit, cur->house_serving_size_unit);
+            newEntry->leftChild = newEntry->rightChild = NULL;
             
             if (newEntry == NULL) {
                 printf("\nHere are your options:\nView diary\nSearch for food\nUpdate entry\nDelete entry\nQuit\n");
@@ -466,7 +554,7 @@ void editJournal(char name[], Food* root) {
 
         //quit
         else if (strcasestr(choice, "quit") != NULL) {
-            free(head);
+            //free(head);
             break;
         }
 
