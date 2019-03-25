@@ -1,0 +1,15 @@
+//this is the script from which food_database.csv is built. To do so, you need the files Nutrients.csv, Products.csv, and Serving_size.csv, which can be downloaded from https://ndb.nal.usda.gov/ndb/
+
+grep -e "Carbohydrate" Nutrients.csv|sed 's/\",\"/~/g'|sed 's/^"//g' |sed 's/Carbohydrate, by difference/Carbohydrate/g' |cut -d~ -f1,5|sort>carbs
+grep -e "Energy" Nutrients.csv|sed 's/\",\"/~/g'|sed 's/^"//g'|cut -d~ -f1,5|sort >energy
+grep -e "Total lipid" Nutrients.csv|sed 's/\",\"/~/g'|sed 's/^"//g' |sed 's/Total lipid (fat)/Fat/g' |cut -d~ -f1,5|sort>fat
+grep -e "Protein" Nutrients.csv|sed 's/\",\"/~/g'|sed 's/^"//g' |cut -d~ -f1,5|sort>protein
+
+cat Products.csv|sed 's/\",\"/~/g'|sed 's/^"//g' |cut -d~ -f1,2,5|sort>product
+cat Serving_size.csv|sed 's/\",\"/~/g'|sed 's/^"//g' |cut -d~ -f1-5|sort>serving
+
+join -t \~ energy carbs>ec
+join -t \~ fat protein>fp
+join -t \~ ec fp >nutrients
+join -t \~ product nutrients >pn
+join -t \~ pn serving >food_database.csv
