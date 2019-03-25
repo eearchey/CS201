@@ -333,12 +333,14 @@ Food *addEntry(Food *cur, char food[], char brand[]) {
         printf("Food not found\n");
         return NULL;
     }
-
     else if ((strcasestr(cur->name, food) != NULL) && (strcasestr(cur->manufacturer, brand) != NULL)) {
         return cur;
     }
 
+    printf("%s\n", cur->name);
     if (strcasecmp(food, cur->name) == 0) {
+        printf("testing\n");
+        //printf("%s\n", cur->manufacturer);
         cur = addEntry(cur->leftChild, food, brand);
     }
 
@@ -437,7 +439,7 @@ void editJournal(char name[], Food* root) {
             journal = fopen(filename, "r");
             if (journal == NULL) {
                 printf("\nDiary is empty.\n");
-                printf("\nHere are your options:\nView diary\nSearch for food\nUpdate entry\nDelete entry\nQuit\n");
+                printf("\nHere are your options:\nView diary\nSearch for food\nAdd entry\nUpdate entry\nDelete entry\nQuit\n");
                 printf("Enter your choice: ");
                 scanf("%s%*c", choice);
                 continue;
@@ -474,13 +476,13 @@ void editJournal(char name[], Food* root) {
 
         //add entry to diary
         else if (strcasestr(choice, "add") != NULL) {
-            printf("Enter the exact name of the food and the brand (if you don't know them, you can use the search function).\n");
+            printf("Enter the full name of the food and the brand (if you don't know them, you can use the search function). If you do not enter the full name, the program will exit.");
             printf("Do you know the name and brand of the food? Enter yes or no (no will return you to the choice selection).\n");
             char understood[10];
-            scanf("%s%*c", understood);
+            scanf("%[^\n]%*c", understood);
 
             if (strcasecmp(understood, "yes") != 0) {
-                printf("\nHere are your options:\nView diary\nSearch for food\nUpdate entry\nDelete entry\nQuit\n");
+                printf("\nHere are your options:\nView diary\nSearch for food\nAdd entry\nUpdate entry\nDelete entry\nQuit\n");
                 printf("Enter your choice: ");
                 scanf("%s%*c", choice);
                 continue;
