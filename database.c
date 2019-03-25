@@ -180,10 +180,16 @@ Food *getDataFromPrevJournal(Food *cur, char name[], FILE *prevDiary) {
     fscanf(prevDiary, "%s", throwaway);
     fscanf(prevDiary, "%f%*c", &cur->house_serving_size);
     fscanf(prevDiary, "%s%*c", cur->house_serving_size_unit);
+
+    fscanf(prevDiary, "%s", throwaway);
+    fscanf(prevDiary, "%s", throwaway);
+    fscanf(prevDiary, "%s", throwaway);
+    fscanf(prevDiary, "%f", &cur->servings);
     return cur;
 }
 
 Food *readFromPrevJournal(Food *first, char filename[]) {
+    first = NULL;
     FILE *prevDiary = fopen(filename, "r");
     Food *cur = (struct Food*)malloc(sizeof(struct Food));
     char temp[1000];
@@ -247,10 +253,10 @@ void writeToLog(char filename[], Food* head) {
         if (strcmp(current->meal, "breakfast") == 0) {
             fprintf(journal, "%s\n", current->name);
             fprintf(journal, "%s\n", current->manufacturer);
-            fprintf(journal, "Calories: %g kcal\n", current->calories);
-            fprintf(journal, "Carbs: %g grams\n", current->carbs);
-            fprintf(journal, "Fat: %g grams\n", current->fat);
-            fprintf(journal, "Protein: %g grams\n", current->protein);
+            fprintf(journal, "Calories: %g kcal\n", (current->calories * current->servings));
+            fprintf(journal, "Carbs: %g grams\n", (current->carbs * current->servings));
+            fprintf(journal, "Fat: %g grams\n", (current->fat * current->servings));
+            fprintf(journal, "Protein: %g grams\n", (current->protein * current->servings));
             if (current->isGrams == true) {
                 fprintf(journal, "Serving Size: %g grams\n", current->serving_size);
             }
@@ -258,6 +264,7 @@ void writeToLog(char filename[], Food* head) {
                 fprintf(journal, "Serving Size: %g mL\n", current->serving_size);
             }
             fprintf(journal, "Household Serving Size: %g %s\n", current->house_serving_size, current->house_serving_size_unit);
+            fprintf(journal, "Number of servings: %g\n", current->servings);
         }
         current = current->nextFood;
     }
@@ -268,10 +275,10 @@ void writeToLog(char filename[], Food* head) {
         if (strcmp(current->meal, "lunch") == 0) {
             fprintf(journal, "%s\n", current->name);
             fprintf(journal, "%s\n", current->manufacturer);
-            fprintf(journal, "Calories: %g kcal\n", current->calories);
-            fprintf(journal, "Carbs: %g grams\n", current->carbs);
-            fprintf(journal, "Fat: %g grams\n", current->fat);
-            fprintf(journal, "Protein: %g grams\n", current->protein);
+            fprintf(journal, "Calories: %g kcal\n", (current->calories * current->servings));
+            fprintf(journal, "Carbs: %g grams\n", (current->carbs * current->servings));
+            fprintf(journal, "Fat: %g grams\n", (current->fat * current->servings));
+            fprintf(journal, "Protein: %g grams\n", (current->protein * current->servings));
             if (current->isGrams == true) {
                 fprintf(journal, "Serving Size: %g grams\n", current->serving_size);
             }
@@ -279,6 +286,7 @@ void writeToLog(char filename[], Food* head) {
                 fprintf(journal, "Serving Size: %g mL\n", current->serving_size);
             }
             fprintf(journal, "Household Serving Size: %g %s\n", current->house_serving_size, current->house_serving_size_unit);
+            fprintf(journal, "Number of servings: %g\n", current->servings);
         }
         current = current->nextFood;
     }
@@ -289,10 +297,10 @@ void writeToLog(char filename[], Food* head) {
         if (strcmp(current->meal, "dinner") == 0) {
             fprintf(journal, "%s\n", current->name);
             fprintf(journal, "%s\n", current->manufacturer);
-            fprintf(journal, "Calories: %g kcal\n", current->calories);
-            fprintf(journal, "Carbs: %g grams\n", current->carbs);
-            fprintf(journal, "Fat: %g grams\n", current->fat);
-            fprintf(journal, "Protein: %g grams\n", current->protein);
+            fprintf(journal, "Calories: %g kcal\n", (current->calories * current->servings));
+            fprintf(journal, "Carbs: %g grams\n", (current->carbs * current->servings));
+            fprintf(journal, "Fat: %g grams\n", (current->fat * current->servings));
+            fprintf(journal, "Protein: %g grams\n", (current->protein * current->servings));
             if (current->isGrams == true) {
                 fprintf(journal, "Serving Size: %g grams\n", current->serving_size);
             }
@@ -300,6 +308,7 @@ void writeToLog(char filename[], Food* head) {
                 fprintf(journal, "Serving Size: %g mL\n", current->serving_size);
             }
             fprintf(journal, "Household Serving Size: %g %s\n", current->house_serving_size, current->house_serving_size_unit);
+            fprintf(journal, "Number of servings: %g\n", current->servings);
         }
         current = current->nextFood;
     }
@@ -310,10 +319,10 @@ void writeToLog(char filename[], Food* head) {
         if (strcmp(current->meal, "snack") == 0) {
             fprintf(journal, "%s\n", current->name);
             fprintf(journal, "%s\n", current->manufacturer);
-            fprintf(journal, "Calories: %g kcal\n", current->calories);
-            fprintf(journal, "Carbs: %g grams\n", current->carbs);
-            fprintf(journal, "Fat: %g grams\n", current->fat);
-            fprintf(journal, "Protein: %g grams\n", current->protein);
+            fprintf(journal, "Calories: %g kcal\n", (current->calories * current->servings));
+            fprintf(journal, "Carbs: %g grams\n", (current->carbs * current->servings));
+            fprintf(journal, "Fat: %g grams\n", (current->fat * current->servings));
+            fprintf(journal, "Protein: %g grams\n", (current->protein * current->servings));
             if (current->isGrams == true) {
                 fprintf(journal, "Serving Size: %g grams\n", current->serving_size);
             }
@@ -321,6 +330,7 @@ void writeToLog(char filename[], Food* head) {
                 fprintf(journal, "Serving Size: %g mL\n", current->serving_size);
             }
             fprintf(journal, "Household Serving Size: %g %s\n", current->house_serving_size, current->house_serving_size_unit);
+            fprintf(journal, "Number of servings: %g\n", current->servings);
         }
         current = current->nextFood;
     }
@@ -328,20 +338,17 @@ void writeToLog(char filename[], Food* head) {
     return;
 }
 
-Food *addEntry(Food *cur, char food[], char brand[]) {
+Food *addEntry(Food *cur, char food[], char brand[], float cals) {
     if (cur == NULL) {
         printf("Food not found\n");
         return NULL;
     }
-    else if ((strcasestr(cur->name, food) != NULL) && (strcasestr(cur->manufacturer, brand) != NULL)) {
+    else if ((strcasestr(cur->name, food) != NULL) && (strcasestr(cur->manufacturer, brand) != NULL) && cur->calories == cals) {
         return cur;
     }
 
-    printf("%s\n", cur->name);
     if (strcasecmp(food, cur->name) == 0) {
-        printf("testing\n");
-        //printf("%s\n", cur->manufacturer);
-        cur = addEntry(cur->leftChild, food, brand);
+        cur = addEntry(cur->leftChild, food, brand, cals);
     }
 
     else if (isupper(cur->name[0])) {
@@ -355,10 +362,10 @@ Food *addEntry(Food *cur, char food[], char brand[]) {
             }
         }
         if (toupper(food[i]) < cur->name[i]) {
-            cur = addEntry(cur->leftChild, food, brand);
+            cur = addEntry(cur->leftChild, food, brand, cals);
         }
         else {
-            cur = addEntry(cur->rightChild, food, brand);
+            cur = addEntry(cur->rightChild, food, brand, cals);
         }
     }
     else {
@@ -372,10 +379,10 @@ Food *addEntry(Food *cur, char food[], char brand[]) {
                 }
         }
         if ((food[j]) < cur->name[j]) {
-            cur = addEntry(cur->leftChild, food, brand);
+            cur = addEntry(cur->leftChild, food, brand, cals);
         }
         else {
-            cur = addEntry(cur->rightChild, food, brand);
+            cur = addEntry(cur->rightChild, food, brand, cals);
         }
     }
     return cur;
@@ -387,12 +394,12 @@ void search(Food *cur, char food[], char brand[]) {
     }
     else if (strcmp(brand, "unknown") == 0) {
             if (strcasestr(cur->name, food) != NULL) {
-            printf("Food: %s, Brand: %s\n", cur->name, cur->manufacturer);
+            printf("Food: %s, Brand: %s, Calories: %g kcal\n", cur->name, cur->manufacturer, cur->calories);
             }
     }
     
     else if ((strcasestr(cur->name, food) != NULL) && (strcasestr(cur->manufacturer, brand) != NULL)) {
-        printf("Food: %s, Brand: %s\n", cur->name, cur->manufacturer);
+        printf("Food: %s, Brand: %s Calories: %g kcal\n", cur->name, cur->manufacturer, cur->calories);
     }
     search(cur->leftChild, food, brand);
     search(cur->rightChild, food, brand);
@@ -408,13 +415,17 @@ void editJournal(char name[], Food* root) {
     strcat(filename, ".log");
     char yn[10];
     char temp[1000];
-    Food *head = NULL;
+    //here i'm allocating memory for the various temporary nodes i use in the sections for add, update, etc. so that they can easily be freed at the end of the program
+    Food *head = NULL; 
     head = (struct Food*)malloc(sizeof(struct Food));
-    head->leftChild = head->rightChild = NULL;
+    head->leftChild = head->rightChild = head->nextFood = NULL;
     Food *cur = NULL;
     cur = (struct Food*)malloc(sizeof(struct Food));
     cur->leftChild = cur->rightChild = NULL;
-    
+    Food *newEntry = NULL;
+    newEntry = (struct Food*)malloc(sizeof(struct Food));
+    newEntry->nextFood = NULL;
+
     journal = fopen(filename, "r");
     if (journal != NULL) {
         fclose(journal);
@@ -425,7 +436,7 @@ void editJournal(char name[], Food* root) {
             head = readFromPrevJournal(head, filename);
         }
     }
-    
+
     //opening choice menu
     printf("\nHi %s!\n", name);
     printf("Here are your options:\nView diary\nSearch for food\nAdd entry\nUpdate entry\nDelete entry\nQuit\n");
@@ -476,8 +487,8 @@ void editJournal(char name[], Food* root) {
 
         //add entry to diary
         else if (strcasestr(choice, "add") != NULL) {
-            printf("Enter the full name of the food and the brand (if you don't know them, you can use the search function). If you do not enter the full name, the program will exit.");
-            printf("Do you know the name and brand of the food? Enter yes or no (no will return you to the choice selection).\n");
+            printf("Enter the full name of the food and the brand, as well as the calorie count for a serving (if you don't know them, you can use the search function). If you do not enter the full name, the program will exit.");
+            printf("Do you know the name, brand, and calorie count of the food? Enter yes or no (no will return you to the choice selection).\n");
             char understood[10];
             scanf("%[^\n]%*c", understood);
 
@@ -494,11 +505,18 @@ void editJournal(char name[], Food* root) {
             printf("Brand name: ");
             char brandName[1000];
             scanf("%[^\n]%*c", brandName);
+            printf("Calorie count: ");
+            float cals;
+            scanf("%f", &cals);
 
-            Food *newEntry = NULL;
-            newEntry = (struct Food*)malloc(sizeof(struct Food));
-            newEntry->nextFood = NULL;
-            cur = addEntry(root, foodName, brandName);
+            cur = addEntry(root, foodName, brandName, cals);
+
+            if (newEntry == NULL) {
+                printf("\nHere are your options:\nView diary\nSearch for food\nUpdate entry\nDelete entry\nQuit\n");
+                printf("Enter your choice: ");
+                scanf("%[^\n]%*c", choice);
+                continue;
+            }
 
             newEntry->ID = cur->ID;
             strcpy(newEntry->name, cur->name);
@@ -510,14 +528,20 @@ void editJournal(char name[], Food* root) {
             newEntry->serving_size = cur->serving_size;
             newEntry->isGrams = cur->isGrams;
             newEntry->house_serving_size = cur->house_serving_size;
-            strcpy(newEntry->house_serving_size_unit, cur->house_serving_size_unit);
+            strncpy(newEntry->house_serving_size_unit, cur->house_serving_size_unit, strlen(cur->house_serving_size_unit) - 1);
             newEntry->leftChild = newEntry->rightChild = NULL;
+            char useGrams[50];
             
-            if (newEntry == NULL) {
-                printf("\nHere are your options:\nView diary\nSearch for food\nUpdate entry\nDelete entry\nQuit\n");
-                printf("Enter your choice: ");
-                scanf("%s", choice);
-                continue;
+            if (newEntry->isGrams == true) {
+                printf("How many servings did you have? One serving is %g %s or %g grams. Please enter a number.\n", newEntry->house_serving_size, newEntry->house_serving_size_unit, newEntry->serving_size);
+            }
+            else {
+                printf("How many servings did you have? One serving is %g %s or %g mL. Please enter a number.\n", newEntry->house_serving_size, newEntry->house_serving_size_unit, newEntry->serving_size);
+            }
+            scanf("%f", &newEntry->servings);
+            while (isdigit(newEntry->servings) != 0) {
+                printf("Sorry, that is not a valid option. Please enter a number.\n");
+                scanf("%f", &newEntry->servings);
             }
 
             newEntry->nextFood = head;
@@ -526,18 +550,25 @@ void editJournal(char name[], Food* root) {
             printf("Did you eat this for breakfast, lunch, dinner, or a snack?\n");
             char meal[40];
             scanf("%s%*c", meal);
-            if (strcasecmp(meal, "breakfast") == 0) {
-                strcpy(head->meal, "breakfast");
-            }
+            while (1) {
+                if (strcasecmp(meal, "breakfast") == 0) {
+                    strcpy(head->meal, "breakfast");
+                    break;
+                }
 
-            else if (strcasecmp(meal, "lunch") == 0) {
-                strcpy(head->meal, "lunch");
-            }
-            else if (strcasecmp(meal, "dinner") == 0) {
-                strcpy(head->meal, "dinner");
-            }
-            else {
-                strcpy(head->meal, "snack");
+                else if (strcasecmp(meal, "lunch") == 0) {
+                    strcpy(head->meal, "lunch");
+                    break;
+                }
+                else if (strcasecmp(meal, "dinner") == 0) {
+                    strcpy(head->meal, "dinner");
+                    break;
+                }
+                else {
+                    strcpy(head->meal, "snack");
+                    break;
+                }
+                printf("Sorry, that is not an option. Please choose breakfast, lunch, dinner, or snack.\n");
             }
 
             writeToLog(filename, head);
@@ -546,17 +577,134 @@ void editJournal(char name[], Food* root) {
 
         //update previous entry
         else if (strcasestr(choice, "update") != NULL) {
-            fprintf(journal, "You've chosen to update!\n");
+            journal = fopen(filename, "r");
+            if (journal == NULL || head == NULL) {
+                printf("\nDiary is empty.\n");
+                printf("\nHere are your options:\nView diary\nSearch for food\nAdd entry\nUpdate entry\nDelete entry\nQuit\n");
+                printf("Enter your choice: ");
+                scanf("%s%*c", choice);
+                continue;
+            }
+            else {
+                printf("\nThis is your current diary.\n");
+                while (fgets(temp, 10000, journal) != NULL) {
+                    printf("%s", temp);
+                }
+
+                char toUpdate[500];
+                printf("Which item would you like to update? Type in the full name of the food.\n");
+                scanf("%[^\n]%*c", toUpdate);
+
+                cur = head;
+
+                bool notThere = false;
+
+                while (cur != NULL) {
+                    if (strcasecmp(cur->name, toUpdate) == 0) {
+                        break;
+                    }
+                    if (cur->nextFood == NULL) {
+                        notThere = true;
+                        printf("Food not found\n");
+                        break;
+                    }
+                }
+
+                if (notThere == true) {
+                    printf("\nHere are your options:\nView diary\nSearch for food\nAdd entry\nUpdate entry\nDelete entry\nQuit\n");
+                    printf("Enter your choice: ");
+                    scanf("%s%*c", choice);
+                }
+
+                else {
+                    if (strcmp(cur->house_serving_size_unit, "none") != 0) {
+                        printf("How many servings did you have? Previously, the value was %g %s.\n", cur->servings, cur->house_serving_size_unit);
+                        scanf("%f", &cur->servings);
+                        writeToLog(filename, head); 
+                    }
+                    else {
+                        if (cur->isGrams == true) {
+                            printf("How many servings did you have? Previously, the value was %g grams.\n", cur->servings);
+                        }
+                        else {
+                            printf("How many servings did you have? Previously, the value was %g mL.\n", cur->servings);
+                        }
+                        scanf("%f", &cur->servings);
+                        writeToLog(filename, head);
+                    }
+                }
+            }
         }
 
         //delete entry
         else if (strcasestr(choice, "delete") != NULL) {
-            fprintf(journal, "You've chosen to delete!\n");
+            journal = fopen(filename, "r");
+            if (journal == NULL || head == NULL) {
+                printf("\nDiary is empty.\n");
+                printf("\nHere are your options:\nView diary\nSearch for food\nAdd entry\nUpdate entry\nDelete entry\nQuit\n");
+                printf("Enter your choice: ");
+                scanf("%s%*c", choice);
+                continue;
+            }
+            else {
+                printf("\nThis is your current diary.\n");
+                while (fgets(temp, 10000, journal) != NULL) {
+                    printf("%s", temp);
+                }
+                char toDelete[500];
+                char meal[50];
+                printf("Which item would you like to delete? Type in the full name.\n");
+                scanf("%[^\n]%*c", toDelete);
+                printf("What meal was this food logged under?\n");
+                scanf("%[^\n]%*c", meal);
+                while (1) {
+                    if (strcasecmp(meal, "breakfast") == 0 || strcasecmp(meal, "lunch") == 0 || strcasecmp(meal, "dinner") == 0 || strcasecmp(meal, "snack") == 0) {
+                        break;
+                    }
+                    printf("Sorry, that is not an option. Please choose breakfast, lunch, dinner, or snack.\n");
+                } 
+
+                cur = head;
+
+                bool notThere = false;
+                //checking for a list with only one entry
+                if (strcasecmp(head->name, toDelete) == 0 && head->nextFood == NULL && strcasecmp(meal, head->meal) == 0) {
+                    head = NULL;
+                    writeToLog(filename, head);
+                    printf("\nHere are your options:\nView diary\nSearch for food\nAdd entry\nUpdate entry\nDelete entry\nQuit\n");
+                    printf("Enter your choice: ");
+                    scanf("%s%*c", choice);
+                    continue;
+                }
+
+                else {
+                    while (cur != NULL) {
+                        if (cur->nextFood != NULL && strcasecmp(cur->nextFood->name, toDelete) == 0) {
+                            break;
+                        }
+                        if (cur->nextFood == NULL) {
+                            notThere = true;
+                            printf("Food not found\n");
+                            break;
+                        }
+                    }
+                }
+
+                if (notThere == true) {
+                    printf("\nHere are your options:\nView diary\nSearch for food\nAdd entry\nUpdate entry\nDelete entry\nQuit\n");
+                    printf("Enter your choice: ");
+                    scanf("%s%*c", choice);
+                    continue;
+                }
+                newEntry = cur->nextFood->nextFood;
+                free(cur->nextFood);
+                cur->nextFood = newEntry;
+            }
+
         }
 
         //quit
         else if (strcasestr(choice, "quit") != NULL) {
-            //free(head);
             break;
         }
 
@@ -570,5 +718,8 @@ void editJournal(char name[], Food* root) {
         scanf("%s", choice);
     }
 
+    //free(head);
+    //free(newEntry);
+    //free(cur);
     return;
 }

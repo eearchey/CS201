@@ -17,7 +17,7 @@ typedef struct Food {
 
     char meal[20];
 
-    int servings;
+    float servings;
 
     struct Food *leftChild;
     struct Food *rightChild;
@@ -28,3 +28,8 @@ typedef struct Food {
 
 void createTree(char[], Food*);
 void editJournal(char[], Food*);
+void search(Food*, char[], char[]);
+Food *addEntry(Food*, char[], char[], float);
+void writeToLog(char[], Food*);
+Food *readFromPrevJournal(Food*, char[]);
+Food *getDataFromPrevJournal(Food*, char[], FILE*);
