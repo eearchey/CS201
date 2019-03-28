@@ -229,7 +229,7 @@ Food *getDataFromPrevJournal(Food *cur, char name[], FILE *prevDiary) {
     return cur;
 }
 
-//this function goes through the previous journal file, throws away the breakfast, lunch, dinner, and snacks headers, and then goes to the getDataFromPrevJournal function to actually get the nodes for the linked list
+//this function goes through the previous journal file, throws away the breakfast, lunch, dinner, and snacks headers, and then goes to the getDataFromPrevJournal function to actually get the nodes for diaryArray
 void readFromPrevJournal(Food *diaryArray[], char filename[]) {
     int tracker = 0;
     diaryArray[tracker] = NULL;
@@ -286,7 +286,7 @@ void readFromPrevJournal(Food *diaryArray[], char filename[]) {
     return;
 }
 
-//this function creates the actual name.log file, using the linked list that is passed in
+//this function creates the actual name.log file, using the diaryArray array of nodes that contain the desired entries
 void writeToLog(char filename[], Food *diaryArray[]) {
     //creates a new file
     int tracker = 0;
@@ -390,7 +390,7 @@ void writeToLog(char filename[], Food *diaryArray[]) {
     return;
 }
 
-//this is a non-linear search and add function that finds the node described by the user input then returns it for adding
+//this is a non-linear search and add function that edits an array of nodes that match the search criteria
 void addEntry(Food *cur, char food[], Food *searchResults[], int * index) {
     //if the entire tree has been recursed down and the node does not exist, this returns
     if (cur == NULL) {
@@ -427,7 +427,7 @@ void getArray(Food *root, Food *searchResults[], char foodName[]) {
     return;
 }
 
-//this is a linear search function that goes through the entire tree, printing the values that match what was input for the name and/or brand
+//this is a linear search function that goes through the entire tree, printing the values that match the keyword for the name and/or brand. Only 20 are printed at a time, after which the user is asked if they want to continue or not. If they do not, the function stops
 void search(Food *cur, char food[], char brand[], int * number) {
     //returns when a leaf is reached
     if (cur == NULL || (*number) == -10) {
@@ -464,6 +464,7 @@ void search(Food *cur, char food[], char brand[], int * number) {
     search(cur->rightChild, food, brand, number);
 }
 
+//this function initializes structs to have all integer/float values equal to -1 and all string values equal to "empty"
 Food *initialize() {
     Food *cur = (struct Food*)malloc(sizeof(struct Food));
     cur->ID = -1;
@@ -536,7 +537,7 @@ void editJournal(char name[], Food* root) {
     printf("Enter your choice: ");
     //reading in what the user's choice is
     char choice[50];
-    scanf("%[^\n]%*c", choice);
+    scanf("%50[^\n]%*c", choice);
 
     while (1) {
         //view diary

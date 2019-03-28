@@ -38,15 +38,19 @@ void createTree(char[], Food*);
 Food *addData(Food*, char[]);
 //this function does the actual editing of the journal for each person
 void editJournal(char[], Food*);
-//this is a linear search function that goes through the entire tree, printing the values that match what was input for the name and/or brand
+//this function initializes structs to have all integer/float values equal to -1 and all string values equal to "empty"
+Food *initialize();
+//this is a linear search function that goes through the entire tree, printing the values that match the keyword for the name and/or brand. Only 20 are printed at a time, after which the user is asked if they want to continue or not. If they do not, the function stops
 void search(Food*, char[], char[], int*);
-//this is a non-linear search and add function that finds the node described by the user input then returns it for adding
+//this function gets the array used for the results in addEntry
+void getArray(Food *, Food *[], char[]);
+//this is a non-linear search and add function that edits an array of nodes that match the search criteria
 void addEntry(Food*, char[], Food *[], int*);
 //this function creates the searchResults array in which the non-linear search results are placed
 void getArray(Food *, Food *[], char[]);
-//this function creates the actual name.log file, using the linked list that is passed in
+//this function creates the actual name.log file, using the diaryArray array of nodes that contain the desired entries
 void writeToLog(char[], Food *[]);
-//this function goes through the previous journal file, throws away the breakfast, lunch, dinner, and snacks headers, and then goes to the getDataFromPrevJournal function to actually get the nodes for the linked lists
+//this function goes through the previous journal file, throws away the breakfast, lunch, dinner, and snacks headers, and then goes to the getDataFromPrevJournal function to actually get the nodes for diaryArray
 void readFromPrevJournal(Food *[], char[]);
 //this function reads in the data from a previous journal, throws away words that aren't required, and adds them to a new node that it returns
 Food *getDataFromPrevJournal(Food*, char[], FILE*);
