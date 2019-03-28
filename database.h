@@ -7,8 +7,8 @@ typedef struct Food {
     //not necessary for the diary program, but i kept it nonetheless
     int ID;
 
-    char name[200];
-    char manufacturer[200];
+    char name[500];
+    char manufacturer[500];
     float calories;
     float carbs;
     float fat;
@@ -27,9 +27,7 @@ typedef struct Food {
     //children for storing the node in the BST
     struct Food *leftChild;
     struct Food *rightChild;
-    //values for the next food in the in linked list that contains the data for the diary
-    struct Food *nextFood;
-    
+
 } Food;
 
 #endif
@@ -38,16 +36,17 @@ typedef struct Food {
 void createTree(char[], Food*);
 //this function gets the data from food_database.csv and creates a node with all of the information, then returns it
 Food *addData(Food*, char[]);
-
 //this function does the actual editing of the journal for each person
 void editJournal(char[], Food*);
 //this is a linear search function that goes through the entire tree, printing the values that match what was input for the name and/or brand
-void search(Food*, char[], char[]);
+void search(Food*, char[], char[], int*);
 //this is a non-linear search and add function that finds the node described by the user input then returns it for adding
-Food *addEntry(Food*, char[], char[], float);
+void addEntry(Food*, char[], Food *[], int*);
+//this function creates the searchResults array in which the non-linear search results are placed
+void getArray(Food *, Food *[], char[]);
 //this function creates the actual name.log file, using the linked list that is passed in
-void writeToLog(char[], Food*);
+void writeToLog(char[], Food *[]);
 //this function goes through the previous journal file, throws away the breakfast, lunch, dinner, and snacks headers, and then goes to the getDataFromPrevJournal function to actually get the nodes for the linked lists
-Food *readFromPrevJournal(Food*, char[]);
+void readFromPrevJournal(Food *[], char[]);
 //this function reads in the data from a previous journal, throws away words that aren't required, and adds them to a new node that it returns
 Food *getDataFromPrevJournal(Food*, char[], FILE*);

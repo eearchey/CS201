@@ -11,6 +11,7 @@ int main (int argc, char *argv[]) {
         printf("Usage: ./port database_file\n");
     }
 
+    printf("Loading...\n");
     //creates the BST that stores the food data from the USDA website
     char fileName[100];
     strcpy(fileName, argv[1]);
@@ -37,5 +38,6 @@ int main (int argc, char *argv[]) {
         }
     }
 
+    free(root);
     return 0;
 }
