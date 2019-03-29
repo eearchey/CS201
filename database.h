@@ -51,6 +51,6 @@ void getArray(Food *, Food *[], char[]);
 //this function creates the actual name.log file, using the diaryArray array of nodes that contain the desired entries
 void writeToLog(char[], Food *[]);
 //this function goes through the previous journal file, throws away the breakfast, lunch, dinner, and snacks headers, and then goes to the getDataFromPrevJournal function to actually get the nodes for diaryArray
-void readFromPrevJournal(Food *[], char[]);
+int readFromPrevJournal(Food *[], char[]);
 //this function reads in the data from a previous journal, throws away words that aren't required, and adds them to a new node that it returns
 Food *getDataFromPrevJournal(Food*, char[], FILE*);

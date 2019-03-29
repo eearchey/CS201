@@ -15,6 +15,7 @@ int main (int argc, char *argv[]) {
     //creates the BST that stores the food data from the USDA website
     char fileName[100];
     strcpy(fileName, argv[1]);
+    
     Food *root = NULL;
     root = (struct Food*)malloc(sizeof(struct Food));
     root->leftChild = root->rightChild = NULL;
@@ -32,12 +33,13 @@ int main (int argc, char *argv[]) {
         editJournal(name, root);
         printf("If you want to edit or view another user's journal, enter their name here. If not, then enter quit again.\n");
         //checks if the user wants to edit another journal, or exits
-        scanf("%s", name); 
+        scanf("%100[^\n]%*c", name); 
         if (strcasestr(name, "quit") != NULL) {
             break;
         }
     }
 
     free(root);
+    root = NULL;
     return 0;
 }
