@@ -1042,6 +1042,16 @@ void editJournal(char name[], Food* root) {
             scanf("%50s", choice);
         }
 
+        int m = 0;
+        while (1) {
+            if (diaryArray[m]->ID == -5 || diaryArray[m]->ID == -1) {
+                diaryTracker = m;
+                break;
+            }
+            m++;
+
+        }
+
         printf("\nHere are your options:\n\nView diary\nSearch for all foods containing keyword\nSearch for and add entry (search must be first word in food name)\nUpdate entry\nDelete entry\nQuit\n");
         printf("\nEnter your choice, then hit enter: ");
         scanf("%50[^\n]%*c", choice);
