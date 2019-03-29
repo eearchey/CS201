@@ -660,6 +660,9 @@ void editJournal(char name[], Food* root) {
             printf("Please be more specific. Would you like to search for a keyword, or search and add?\n");
             printf("Enter your choice, then hit enter: ");
             scanf("%50[^\n]%*c", choice);
+            if (strcasecmp(choice, "search") == 0) {
+                scanf("%50s", choice);
+            }
             continue;
         }
 
@@ -1033,11 +1036,13 @@ void editJournal(char name[], Food* root) {
         //if they entered an invalid option
         else {
             printf("Sorry, that is not an available option. Please choose to view, search, update, delete, or quit.\n");
+            scanf("%50s", choice);
         }
 
         printf("\nHere are your options:\n\nView diary\nSearch for all foods containing keyword\nSearch for and add entry (search must be first word in food name)\nUpdate entry\nDelete entry\nQuit\n");
         printf("\nEnter your choice, then hit enter: ");
         scanf("%50[^\n]%*c", choice);
+        printf("Your choice is %s.\n", choice);
     }
 
     return;
