@@ -508,11 +508,11 @@ void search(Food *cur, char food[], char brand[], int * number) {
 
     else if ((*number) == 20) {
         char yn[15];
-        printf("Would you like to view more results? Enter yes or no.\n");
+        printf("Would you like to view more results? Enter yes or no, then hit enter.\n");
         scanf("%15[^\n]%*c", yn);
 
         while (strcasecmp(yn, "yes") != 0 && strcasecmp(yn, "no") != 0) {
-                printf("Sorry, that isn't a valid response. Enter yes or no.\n");
+                printf("Sorry, that isn't a valid response. Enter yes or no, then hit enter.\n");
                 scanf("%10[^\n]%*c", yn);
         }
 
@@ -590,11 +590,11 @@ void editJournal(char name[], Food* root) {
     if (journal != NULL) {
         fclose(journal);
         //if the diary exists, the user is asked if it belongs to them
-        printf("Is this your diary? Enter yes or no.\n");
+        printf("Is this your diary? Enter yes or no, then hit enter.\n");
         printf("%s\n", filename);
         scanf("%10[^\n]%*c", yn);
         while (strcasecmp(yn, "yes") != 0 && strcasecmp(yn, "no") != 0) {
-            printf("Sorry, that isn't a valid response. Enter yes or no.\n");
+            printf("Sorry, that isn't a valid response. Enter yes or no, then hit enter.\n");
             scanf("%10[^\n]%*c", yn);
         }
         //if the diary is theirs, the data is read in and the new entries (or updates, deletions, etc.) are added to that previously existing list
@@ -642,24 +642,24 @@ void editJournal(char name[], Food* root) {
             char brand[1000];
             int number = 0;
             //asks the user if they know the name of the brand
-            printf("Do you know the brand? Enter yes or no.\n");
+            printf("Do you know the brand? Enter yes or no, then hit enter.\n");
             scanf("%10[^\n]%*c", yn);
             while (strcasecmp(yn, "yes") != 0 && strcasecmp(yn, "no") != 0) {
-                printf("Sorry, that isn't a valid response. Enter yes or no.\n");
+                printf("Sorry, that isn't a valid response. Enter yes or no, then hit enter.\n");
                 scanf("%10[^\n]%*c", yn);
             }
             //if they know the name of the brand, the food and brand are searched for
             if (strcasecmp(yn, "yes") == 0) {
-                printf("What is the brand name?\n");
+                printf("Enter the brand name, then hit enter.\n");
                 scanf("%1000[^\n]%*c", brand);
-                printf("What was the food?\n");
+                printf("Enter the name of the food, then hit enter.\n");
                 scanf("%1000[^\n]%*c", food);
                 printf("\n");
                 search(root, food, brand, &number);
             }
             //if not, just the name of the food is searched for
             else {
-                printf("What was the food?\n");
+                printf("Enter the name of the food, then hit enter.\n");
                 scanf("%1000[^\n]%*c", food);
                 printf("\n");
                 search(root, food, "unknown", &number);
@@ -675,7 +675,7 @@ void editJournal(char name[], Food* root) {
             }
 
             char foodName[1000];
-            printf("What is the name of your food? Please be specific--only 1000 results will be available, loaded 20 at a time.\n");
+            printf("Enter the name of your food, then hit enter. Please be specific--only 1000 results will be available, loaded 20 at a time.\n");
             scanf("%1000[^\n]%*c", foodName);
             getArray(root, searchResults, foodName);
 
@@ -695,10 +695,10 @@ void editJournal(char name[], Food* root) {
                printf("%d. Food: %s Brand: %s Calories: %g\n", (j + 1), searchResults[j]->name, searchResults[j]->manufacturer, searchResults[j]->calories * searchResults[j]->serving_size /100);
                 j++;
                 if (i == 19) {
-                    printf("Would you like to see more results? Enter yes or no.\n");
+                    printf("Would you like to see more results? Enter yes or no, then hit enter.\n");
                     scanf("%10[^\n]%*c", yn);
                     while (strcasecmp(yn, "yes") != 0 && strcasecmp(yn, "no") != 0) {
-                        printf("Sorry, that isn't a valid response. Enter yes or no.\n");
+                        printf("Sorry, that isn't a valid response. Enter yes or no, then hit enter.\n");
                         scanf("%10[^\n]%*c", yn);
                     }
                     if (strcasecmp(yn, "yes") == 0) {
@@ -708,10 +708,10 @@ void editJournal(char name[], Food* root) {
                 i++;
             }
 
-            printf("Would you like to add any of these? Enter yes or no.\n");
+            printf("Would you like to add any of these? Enter yes or no, then hit enter.\n");
             scanf("%10[^\n]%*c", yn);
             while (strcasecmp(yn, "yes") != 0 && strcasecmp(yn, "no") != 0) {
-                printf("Sorry, that isn't a valid response. Enter yes or no.\n");
+                printf("Sorry, that isn't a valid response. Enter yes or no, then hit enter.\n");
                 scanf("%10[^\n]%*c", yn);
             }
 
@@ -723,10 +723,10 @@ void editJournal(char name[], Food* root) {
             }
             
             char entryChoice[10];
-            printf("Which entry would you like to add? Enter the number.\n");
+            printf("Which entry would you like to add? Enter the number, then hit enter.\n");
             scanf("%10[^\n]%*c", entryChoice);
             while (isdigit(atoi(entryChoice)) != 0) {
-                printf("Sorry, that is not a valid option. Please enter a number.\n");
+                printf("Sorry, that is not a valid option. Please enter a number, then hit enter.\n");
                 scanf("%10[^\n]%*c", entryChoice);
             }
 
@@ -749,19 +749,19 @@ void editJournal(char name[], Food* root) {
             //this prints the correct serving size, with household and grams or mL depending on which it had in the database
             if (strcmp(diaryArray[diaryTracker]->house_serving_size_unit, "none") != 0) {
                 if (diaryArray[diaryTracker]->isGrams == true) {
-                    printf("How many servings did you have? One serving is %g %s or %g grams. Please enter a number.\n", diaryArray[diaryTracker]->house_serving_size, diaryArray[diaryTracker]->house_serving_size_unit, newEntry->serving_size);
+                    printf("How many servings did you have? One serving is %g %s or %g grams. Please enter a number, then hit enter.\n", diaryArray[diaryTracker]->house_serving_size, diaryArray[diaryTracker]->house_serving_size_unit, newEntry->serving_size);
                 }
                 else {
-                    printf("How many servings did you have? One serving is %g %s or %g mL. Please enter a number.\n", diaryArray[diaryTracker]->house_serving_size, diaryArray[diaryTracker]->house_serving_size_unit, newEntry->serving_size);
+                    printf("How many servings did you have? One serving is %g %s or %g mL. Please enter a number, then hit enter.\n", diaryArray[diaryTracker]->house_serving_size, diaryArray[diaryTracker]->house_serving_size_unit, newEntry->serving_size);
                 }
             }
             
             else {
                 if (diaryArray[diaryTracker]->isGrams == true) {
-                    printf("How many servings did you have? One serving is %g grams. Please enter a number.\n", newEntry->serving_size);
+                    printf("How many servings did you have? One serving is %g grams. Please enter a number, then hit enter.\n", newEntry->serving_size);
                 }
                 else {
-                    printf("How many servings did you have? One serving is %g mL. Please enter a number.\n", newEntry->serving_size);
+                    printf("How many servings did you have? One serving is %g mL. Please enter a number, then hit enter.\n", newEntry->serving_size);
                 }
             }
 
@@ -769,7 +769,7 @@ void editJournal(char name[], Food* root) {
             scanf("%10[^\n]%*c", tempValue);
             //checking for user error where they don't enter a number
             while (isdigit(atof(tempValue)) != 0) {
-                printf("Sorry, that is not a valid option. Please enter a number.\n");
+                printf("Sorry, that is not a valid option. Please enter a number, then hit enter.\n");
                 scanf("%10[^\n]%*c", tempValue);
             }
             diaryArray[diaryTracker]->servings = atof(tempValue);
@@ -781,7 +781,7 @@ void editJournal(char name[], Food* root) {
             diaryArray[diaryTracker]->protein *= diaryArray[diaryTracker]->servings;
 
             //checking what meal this entry should be logged under
-            printf("Did you eat this for breakfast, lunch, dinner, or a snack?\n");
+            printf("Did you eat this for breakfast, lunch, dinner, or a snack? Enter the meal's name, then hit enter.\n");
             char meal[40];
             scanf("%40[^\n]%*c", meal);
             while (1) {
@@ -803,7 +803,7 @@ void editJournal(char name[], Food* root) {
                     break;
                 }
                 //checking for user error
-                printf("Sorry, that is not an option. Please choose breakfast, lunch, dinner, or snack.\n");
+                printf("Sorry, that is not an option. Please choose breakfast, lunch, dinner, or snack, then hit enter.\n");
                 scanf("%40[^\n]%*c", meal);
             }
             
@@ -835,16 +835,16 @@ void editJournal(char name[], Food* root) {
                 char toUpdate[500];
                 char mealUpdate[50];
                 //getting the name and meal of the food to be updated
-                printf("\nWhich item would you like to update? Type in the full name of the food.\n");
+                printf("\nWhich item would you like to update? Type in the full name of the food, then hit enter.\n");
                 scanf("%500[^\n]%*c", toUpdate);
-                printf("What meal was this food logged under?\n");
+                printf("What meal was this food logged under? Please enter the meal's name, then hit enter.\n");
                 scanf("%50[^\n]%*c", mealUpdate);
                 while (1) {
                     if ((strcasecmp(mealUpdate, "breakfast") == 0) || (strcasecmp(mealUpdate, "lunch") == 0) || (strcasecmp(mealUpdate, "dinner") == 0) || (strcasecmp(mealUpdate, "snack") == 0)) {
                         break;
                     }
                     else {
-                        printf("Sorry, that is not an option. Please choose breakfast, lunch, dinner, or snack.\n");
+                        printf("Sorry, that is not an option. Please choose breakfast, lunch, dinner, or snack, then hit enter.\n");
                         scanf("%50[^\n]%*c", mealUpdate);
                     }
                 }
@@ -888,7 +888,7 @@ void editJournal(char name[], Food* root) {
                         scanf("%10[^\n]%*c", tempValue);
                         //checking for user error where they don't enter a number
                         while (isdigit(atof(tempValue)) != 0) {
-                            printf("Sorry, that is not a valid option. Please enter a number.\n");
+                            printf("Sorry, that is not a valid option. Please enter a number, then hit enter.\n");
                             scanf("%10[^\n]%*c", tempValue);
                         }
                         diaryArray[tracker]->servings = atof(tempValue);
@@ -916,7 +916,7 @@ void editJournal(char name[], Food* root) {
                         scanf("%10[^\n]%*c", tempValue);
                         //checking for user error where they don't enter a number
                         while (isdigit(atof(tempValue)) != 0) {
-                            printf("Sorry, that is not a valid option. Please enter a number.\n");
+                            printf("Sorry, that is not a valid option. Please enter a number, then hit enter.\n");
                             scanf("%10[^\n]%*c", tempValue);
                         }
 
@@ -955,16 +955,16 @@ void editJournal(char name[], Food* root) {
                 char toDelete[500];
                 char mealDelete[50];
                 //prompts the user for the name and meal of the entry to be deleted
-                printf("Which item would you like to delete?\n");
+                printf("Which item would you like to delete? Please enter the full name, then hit enter.\n");
                 scanf("%500[^\n]%*c", toDelete);
-                printf("What meal was this food logged under?\n");
+                printf("What meal was this food logged under? Please enter the meal's name, then hit enter.\n");
                 scanf("%50[^\n]%*c", mealDelete);
                 while (1) {
                     //makes sure the user enters a valid meal category
                     if (strncasecmp(mealDelete, "breakfast", 9) == 0 || strncasecmp(mealDelete, "lunch", 5) == 0 || strncasecmp(mealDelete, "dinner", 6) == 0 || strncasecmp(mealDelete, "snack", 5) == 0) {
                         break;
                     }
-                    printf("Sorry, that is not an option. Please enter breakfast, lunch, dinner, or snack.\n");
+                    printf("Sorry, that is not an option. Please enter breakfast, lunch, dinner, or snack, then hit enter.\n");
                     scanf("%50[^\n]%*c", mealDelete);
                 } 
 

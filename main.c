@@ -24,7 +24,7 @@ int main (int argc, char *argv[]) {
     printf("Welcome to your diary!\n");
 
     //asks for user name
-    printf("Who are you?\n");
+    printf("Who are you? Enter your name, then hit enter.\n");
     char name[100];
     scanf("%[^\n]%*c", name);
 
