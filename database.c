@@ -698,6 +698,9 @@ void editJournal(char name[], Food* root) {
 
         //add entry to diary
         else if (strcasestr(choice, "add") != NULL) {
+            if (diaryTracker == 999) {
+                diaryTracker = 0;
+            }
             Food *searchResults[1000];
             for (int k = 0; k < 1000; k++) {
                 searchResults[k] = (struct Food*)malloc(sizeof(struct Food));
