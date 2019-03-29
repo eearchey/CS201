@@ -31,7 +31,7 @@ int main (int argc, char *argv[]) {
     while (1) {
         //lets the user edit their journal
         editJournal(name, root);
-        printf("If you want to edit or view another user's journal, enter their name here. If not, then enter quit again.\n");
+        printf("If you want to create a new journal, edit, or view another user's journal, enter their name here. If not, then enter quit again.\n");
         //checks if the user wants to edit another journal, or exits
         scanf("%100[^\n]%*c", name); 
         if (strcasestr(name, "quit") != NULL) {

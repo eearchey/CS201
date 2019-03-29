@@ -571,7 +571,11 @@ void editJournal(char name[], Food* root) {
 
     //this is a yes/no string that I use multiple times across view, add etc., so I declare it up top
     char yn[10];
+    //templine used for fgets mainly
     char temp[1000];
+    //seeing if there are already files with certain names, and if there are i append numbers to the end
+    int numJournals = 1;
+    char numJournalsString[5] = "1";
 
     //creating the array of nodes which is used to store the entires for each diary
     Food *diaryArray[1000];
@@ -602,6 +606,29 @@ void editJournal(char name[], Food* root) {
             diaryTracker = readFromPrevJournal(diaryArray, filename);
         }
         else {
+            filename[strlen(filename) - 4] = '\0';
+            strcat(filename, numJournalsString);
+            strcat(filename, ".log");
+            journal = fopen(filename, "r");
+            while (journal != NULL && strcasecmp(yn, "no") == 0) {
+                printf("Is this your diary? Enter yes or no, then hit enter.\n");
+                printf("%s\n", filename);
+                scanf("%10[^\n]%*c", yn);
+                while (strcasecmp(yn, "yes") != 0 && strcasecmp(yn, "no") != 0) {
+                    printf("Sorry, that isn't a valid response. Enter yes or no, then hit enter.\n");
+                    scanf("%10[^\n]%*c", yn);
+                }
+                if (strcasecmp(yn, "yes") == 0) {
+                    diaryTracker = readFromPrevJournal(diaryArray, filename);
+                    break;
+                }
+                numJournals++;
+                sprintf(numJournalsString, "%d", numJournals);
+                filename[strlen(filename) - 5] = '\0';
+                strcat(filename, numJournalsString);
+                strcat(filename, ".log");
+                journal = fopen(filename, "r");
+            }
             writeToLog(filename, diaryArray);
         }
     }
