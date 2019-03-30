@@ -26,7 +26,8 @@ int main (int argc, char *argv[]) {
     //asks for user name
     printf("Who are you? Enter your name, then hit enter.\n");
     char name[100];
-    scanf("%[^\n]%*c", name);
+    scanf("%100[^\n]%*c", name);
+    //taken from https://stackoverflow.com/questions/30065675/what-does-scanf-nc-mean and used in various places throughout the code 
 
     while (1) {
         //lets the user edit their journal
