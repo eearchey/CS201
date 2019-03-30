@@ -506,40 +506,67 @@ void search(Food *cur, char food[], char brand[], int * number) {
         return;
     }
 
-    else if ((*number) == 20) {
-        char yn[15];
-        printf("Would you like to view more results? Enter yes or no, then hit enter.\n");
-        scanf("%15[^\n]%*c", yn);
+    else {
+        for (int i = 0; i < strlen(cur->name); i++) {
+            (cur->name[i]) = toupper(cur->name[i]);
+        }
 
-        while (strcasecmp(yn, "yes") != 0 && strcasecmp(yn, "no") != 0) {
+        for (int i = 0; i < strlen(food); i++) {
+            food[i] = toupper(food[i]);
+        }
+
+        if (strcmp(brand, "UNKNOWN") != 0) {
+            for (int i = 0; i < strlen(brand); i++) {
+                brand[i] = toupper(brand[i]);
+            }
+        }
+
+        for (int i = 0; i < strlen(cur->manufacturer); i++) {
+            (cur->manufacturer[i]) = toupper(cur->manufacturer[i]);
+        }
+
+        if ((*number) == 20) {
+            char yn[15];
+            printf("Would you like to view more results? Enter yes or no, then hit enter.\n");
+            scanf("%15[^\n]%*c", yn);
+
+            while (strcasecmp(yn, "yes") != 0 && strcasecmp(yn, "no") != 0) {
                 printf("Sorry, that isn't a valid response. Enter yes or no, then hit enter.\n");
                 scanf("%10[^\n]%*c", yn);
-        }
-
-        if (strcasecmp(yn, "no") == 0) {
-            (*number) = -10;
-            return;
-        }
-        (*number) = 0;
-    }
-
-    //if the user didn't know the brand when prompted
-    else if (strcmp(brand, "unknown") == 0) {
-            //prints when a match is found
-            if (strcasestr(cur->name, food) != NULL) {
-            printf("Food: %s, Brand: %s, Calories: %g kcal\n", cur->name, cur->manufacturer, cur->calories);
-            (*number)++;
             }
-    }
 
-    //prints when a match is found
-    else if ((strcasestr(cur->name, food) != NULL) && (strcasestr(cur->manufacturer, brand) != NULL)) {
-        printf("Food: %s, Brand: %s Calories: %g kcal\n", cur->name, cur->manufacturer, cur->calories);
-        (*number)++;
+            if (strcasecmp(yn, "no") == 0) {
+                (*number) = -10;
+                return;
+            }
+            (*number) = 0;
+        }
+
+        //if the user didn't know the brand when prompted
+        else if (strcmp(brand, "UNKNOWN") == 0) {
+            //prints when a match is found
+            if (strstr(cur->name, food) != NULL) {
+                if ((*number) == 0) {
+                    printf("Results: \n");
+                }  
+                printf("Food: %s, Brand: %s, Calories: %g kcal\n", cur->name, cur->manufacturer, cur->calories);
+                (*number)++;
+            }
+        }
+
+        //prints when a match is found
+        else if ((strstr(cur->name, food) != NULL) && (strstr(cur->manufacturer, brand) != NULL)) {
+            if ((*number) == 0) {
+                printf("Results: \n");
+            }
+            printf("Food: %s, Brand: %s Calories: %g kcal\n", cur->name, cur->manufacturer, cur->calories);
+            (*number)++;
+        }
+
+        //recurses down the tree
+        search(cur->leftChild, food, brand, number);
+        search(cur->rightChild, food, brand, number);
     }
-    //recurses down the tree
-    search(cur->leftChild, food, brand, number);
-    search(cur->rightChild, food, brand, number);
 }
 
 //this function initializes structs to have all integer/float values equal to -1 and all string values equal to "empty"
@@ -647,8 +674,12 @@ void editJournal(char name[], Food* root) {
     scanf("%50[^\n]%*c", choice);
 
     while (1) {
+        for (int i = 0; i < strlen(choice); i++) {
+                choice[i] = toupper(choice[i]);
+        }
+
         //view diary
-        if (strcasestr(choice, "view") != NULL) {
+        if (strstr(choice, "VIEW") != NULL) {
             journal = fopen(filename, "r");
             printf("\n");
             while (fgets(temp, 10000, journal) != NULL) {
@@ -656,7 +687,7 @@ void editJournal(char name[], Food* root) {
             }
         }
 
-        else if (strcasecmp(choice, "search") == 0) {
+        else if (strcmp(choice, "SEARCH") == 0) {
             printf("Please be more specific. Would you like to search for a keyword, or search and add?\n");
             printf("Enter your choice, then hit enter: ");
             scanf("%50[^\n]%*c", choice);
@@ -667,7 +698,7 @@ void editJournal(char name[], Food* root) {
         }
 
         //search foods
-        else if ((strcasestr(choice, "search for all")) != NULL || (strcasestr(choice, "keyword") != NULL)) {
+        else if ((strstr(choice, "SEARCH FOR ALL")) != NULL || (strstr(choice, "KEYWORD") != NULL)) {
             char food[1000];
             char brand[1000];
             int number = 0;
@@ -692,12 +723,12 @@ void editJournal(char name[], Food* root) {
                 printf("Enter the name of the food, then hit enter.\n");
                 scanf("%1000[^\n]%*c", food);
                 printf("\n");
-                search(root, food, "unknown", &number);
+                search(root, food, "UNKNOWN", &number);
             }
         }
 
         //add entry to diary
-        else if (strcasestr(choice, "add") != NULL) {
+        else if (strstr(choice, "ADD") != NULL) {
             if (diaryTracker == 999) {
                 diaryTracker = 0;
             }
@@ -831,7 +862,7 @@ void editJournal(char name[], Food* root) {
                     strcpy(diaryArray[diaryTracker]->meal, "dinner");
                     break;
                 }
-                else {
+                else if (strcasecmp(meal, "snack") == 0) {
                     strcpy(diaryArray[diaryTracker]->meal, "snack");
                     break;
                 }
@@ -847,7 +878,7 @@ void editJournal(char name[], Food* root) {
         }
 
         //update previous entries (one at a time)
-        else if (strcasestr(choice, "update") != NULL) {
+        else if (strstr(choice, "UPDATE") != NULL) {
             journal = fopen(filename, "r");
             //checking if the diary exists
             if (journal == NULL || diaryArray[0]->ID == -1) {
@@ -967,7 +998,7 @@ void editJournal(char name[], Food* root) {
         }
 
         //delete entry
-        else if (strcasestr(choice, "delete") != NULL) {
+        else if (strstr(choice, "DELETE") != NULL) {
             journal = fopen(filename, "r");
             //checking if the journal file exists
             //if it does not exist, the choice menu comes up again
@@ -1032,7 +1063,7 @@ void editJournal(char name[], Food* root) {
         }
 
         //quit
-        else if (strcasestr(choice, "quit") != NULL) {
+        else if (strstr(choice, "QUIT") != NULL) {
             break;
         }
 
